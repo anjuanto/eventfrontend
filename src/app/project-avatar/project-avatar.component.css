@@ -1,0 +1,8 @@
+.avatar-image {
+  width: 55px; /* Increase the width */
+  height: 55px; /* Increase the height */
+  background-size: cover; /* Ensure the image covers the div */
+  background-position: center; /* Center the image */
+  border-radius: 50%; /* Make it circular, if desired */
+  box-shadow: 0px 6px 12px rgba(0.3, 0.3, 0.3, 0.3); 
+}

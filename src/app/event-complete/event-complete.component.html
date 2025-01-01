@@ -1,0 +1,96 @@
+<div class="eventedit-container">
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <button mat-icon-button color="primary" (click)="goback()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="eventForm" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <mat-form-field appearance="outline" fxFlex="100%">
+      <mat-label>Search Title</mat-label>
+      <input matInput formControlName="title" placeholder="Search by Title" (input)="applyFilter()">
+    </mat-form-field>
+
+    <div>
+      <button mat-raised-button (click)="onCancel()">Cancel</button>
+    </div>
+  </form>
+  <br>
+ 
+  <div fxLayout="row wrap" fxLayoutGap="16px" fxLayoutAlign="start start">
+    <div *ngFor="let event of paginatedEvents" class="card-section" fxFlex="100%" fxFlex.sm="48%" fxFlex.md="31%" fxFlex.lg="20%" fxFlex.xl="23%">
+
+      
+      <mat-card class="example-card" appearance="outlined" >
+        <mat-card-header (click)="showDetails(event.id)">
+
+          <mat-card-title>
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="title-container">
+              <app-project-avatar [projectName]="event.project?.name"></app-project-avatar>
+              {{ event.title }}
+                <!-- Menu Button -->
+             
+            </div>
+          </mat-card-title>
+        </mat-card-header><br>
+
+  <div *ngIf="showUploadMap[event.id]">
+    <app-uploads [eventId]="event.id" [softcopy_type]="2"></app-uploads>
+  </div>
+  <div *ngIf="showEditorMap[event.id]">
+    <ckeditor [editor]="Editor" [config]="editorConfig" [(ngModel)]="editorContent"></ckeditor>
+    <br>
+    <button mat-raised-button color="accent" (click)="saveContent()">Save</button>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="16px">
+    <button mat-icon-button color="primary" (click)="toggleUpload(event.id)" class="button-label">
+      <mat-icon>upload</mat-icon>
+      upload
+    </button>
+    <button mat-icon-button color="primary" (click)="toggleEditor(event.id)" class="button-label">
+      <mat-icon>description</mat-icon>
+      editor
+    </button>
+  </div>
+
+
+
+   <div *ngIf="event.softcopyDetails && event.softcopyDetails.length > 0" class="softcopy-details" fxLayout="row" fxLayoutWrap fxLayoutGap="10px">
+    <div *ngFor="let softcopy of event.softcopyDetails" class="softcopy-box" fxFlex="auto" fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon *ngIf="isPDF(softcopy.original_filename)">picture_as_pdf</mat-icon>
+      <mat-icon *ngIf="isImage(softcopy.original_filename)">photo</mat-icon>
+      <a [href]="getFileUrl(softcopy)" target="_blank" class="file-name">{{ softcopy.original_filename }}</a>
+      <button mat-icon-button color="warn" (click)="deleteSoftcopy(event)" matTooltip="Delete File">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <button *ngIf="event.softcopyDetails.length > 1" mat-button class="file-count-button" (click)="toggleFilesVisibility(event, $event)">
+      +{{ event.softcopyDetails.length - 1 }}
+    </button>
+    <div *ngIf="event.showAdditionalFiles" class="softcopy-details" fxLayout="row" fxLayoutWrap fxLayoutGap="10px">
+      <div *ngFor="let softcopy of event.softcopyDetails.slice(1)" class="softcopy-box" fxFlex="auto" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon *ngIf="isPDF(softcopy.original_filename)">picture_as_pdf</mat-icon>
+        <mat-icon *ngIf="isImage(softcopy.original_filename)">photo</mat-icon>
+        <a [href]="getFileUrl(softcopy)" target="_blank" class="file-name">{{ softcopy.original_filename }}</a>
+      </div>
+    </div>
+  </div>
+
+
+</mat-card>
+</div>
+</div>
+
+
+
+  <mat-paginator 
+  [length]="events.length" 
+  [pageSize]="pageSize" 
+  [pageSizeOptions]="[4, 8, 16, 100]" 
+  (page)="onPageChange($event)" 
+  showFirstLastButtons
+  style="display: flex; justify-content: center; margin-top: 20px;">
+</mat-paginator>
+
+
+

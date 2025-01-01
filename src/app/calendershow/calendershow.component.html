@@ -1,0 +1,60 @@
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <button mat-icon-button color="primary" (click)="goback()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </div>
+  
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+  
+  <!-- <div *ngFor="let event of events">
+    <mat-card>
+      <mat-card-title fxLayoutAlign="center center">
+        {{ event.title }} 
+      </mat-card-title><br>
+  
+      <mat-card-content>
+        <p><strong><span class="circle-icon">A</span> Amala Project:</strong> {{ event.project?.name }}</p>
+        <p><strong><mat-icon>event</mat-icon> Event Type:</strong> {{ event.event_type?.name }}</p>
+        <p><strong><mat-icon>email</mat-icon> Contact Email:</strong> {{ event.contact_email }}</p>
+        <p><strong><mat-icon>phone</mat-icon> Contact Number:</strong> {{ event.contact_no }}</p>
+        <p><strong><mat-icon>place</mat-icon> Event Venue:</strong>
+          {{ event.event_venue?.name || 'N/A' }}
+
+        </p>
+        <p><strong><mat-icon>info</mat-icon> Status:</strong> {{ event.status?.status || 'N/A' }}</p>
+        <p>
+          <strong><mat-icon>schedule</mat-icon> Time:</strong> 
+          {{ event.datetime_from | date:'dd MMM yyyy, h:mm a' }} - {{ event.datetime_to | date:'dd MMM yyyy, h:mm a' }}
+        </p>
+        <p><strong><mat-icon>description</mat-icon>Event Report: </strong> {{event.event_report}}
+        </p>
+      </mat-card-content><br>
+    </mat-card><br>
+    </div> -->
+
+    <ng-container *ngFor="let event of events" >
+
+
+      <mat-card class="event-card" appearance="outlined" >
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="event-header">
+          <app-project-avatar [projectName]="event.project?.name" class="avatar-shadow"></app-project-avatar>
+          <div fxLayout="column" class="event-info">
+            <mat-card-title class="mat-card-title">{{ event.title || 'No Title' }}</mat-card-title>
+            <span class="event-venue">
+              <mat-icon style="font-size: 20px;">place</mat-icon>
+              {{ event.event_venue?.name || 'N/A' }}
+            </span>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="center center" class="date-box">
+            <span class="date-day">{{ event.datetime_from | date:'MMM' | uppercase }}</span>
+            <span class="date-date">{{ event.datetime_from | date:'d' }}</span><br>
+            <span class="date-time">{{ event.datetime_from | date:'h:mm a' }}</span>
+          </div>
+        </div>
+      </mat-card>
+      
+    </ng-container>
+  
+

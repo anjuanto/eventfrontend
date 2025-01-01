@@ -1,0 +1,142 @@
+<br><form [formGroup]="eventForm" (ngSubmit)="onsubmit()">
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let categoryId of getCategoryIds()">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ getSupportingCategoryNameById(categoryId) }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div *ngIf="groupedByCategory[categoryId].length > 0">
+        <div *ngFor="let product of groupedByCategory[categoryId]">
+          <div class="product-details">
+            <h4>{{ product.category_product.name }}</h4>
+            
+            <!-- Radio button group for products with form_field_type 'radio' -->
+            <div *ngIf="product.form_field_type === 'radio'">
+              <mat-radio-group (change)="onRadioChange($event, product)">
+                <mat-radio-button *ngFor="let option of product.radio_options" 
+                                  [value]="option" 
+                                  [checked]="option === product.defaultOption">
+                  {{ option }}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+        
+         <!-- Radio button group for products with form_field_type 'radio_with_count' -->
+         <div *ngIf="product.form_field_type === 'radio_with_count'">
+          <mat-radio-group (change)="onRadioChange($event, product)">
+            <mat-radio-button *ngFor="let option of product.radio_options" 
+                              [value]="option" 
+                              [checked]="option === product.defaultOption">
+              {{ option }}
+            </mat-radio-button>
+          </mat-radio-group>
+
+          <!-- Show Count field if the selected option is 'YES' -->
+          <mat-form-field appearance="outline"  *ngIf="product.selectedOption === 'YES' || product.response_id?.response === 'YES'">
+            <mat-label>Count</mat-label>
+            <input matInput 
+                   type="number" 
+                   [formControlName]="'count_' + product.id" 
+                   placeholder="Count" 
+                   min="1">
+          
+            <!-- Error for required field -->
+            <mat-error *ngIf="eventForm.get('count_' + product.id)?.hasError('required') && (eventForm.get('count_' + product.id)?.touched || eventForm.get('count_' + product.id)?.dirty)">
+              Count is required.
+            </mat-error>
+          
+            <!-- Error for invalid value (not positive integer) -->
+            <mat-error *ngIf="eventForm.get('count_' + product.id)?.hasError('min') && (eventForm.get('count_' + product.id)?.touched || eventForm.get('count_' + product.id)?.dirty)">
+              Count must be greater than 0.
+            </mat-error>
+            
+            <!-- Error for invalid pattern (e.g., non-integer values) -->
+            <mat-error *ngIf="eventForm.get('count_' + product.id)?.hasError('pattern') && (eventForm.get('count_' + product.id)?.touched || eventForm.get('count_' + product.id)?.dirty)">
+              Count must be a whole number.
+            </mat-error>
+          </mat-form-field>
+            
+          </div>
+
+           <!-- Radio button group for products with form_field_type 'radio_with_count_remarks' -->
+           <div *ngIf="product.form_field_type === 'radio_with_count_remarks'">
+            <mat-radio-group (change)="onRadioChange($event, product)">
+              <mat-radio-button *ngFor="let option of product.radio_options" 
+                                [value]="option" 
+                                [checked]="option === product.defaultOption">
+                {{ option }}
+              </mat-radio-button>
+            </mat-radio-group>
+
+            <mat-form-field appearance="outline"  *ngIf="product.selectedOption === 'YES' || product.response_id?.response === 'YES'">
+              <mat-label>Count</mat-label>
+              <input matInput 
+                     type="number" 
+                     [formControlName]="'count_' + product.id" 
+                     placeholder="Count" 
+                     min="1">
+            
+              <!-- Error for required field -->
+              <mat-error *ngIf="eventForm.get('count_' + product.id)?.hasError('required') && (eventForm.get('count_' + product.id)?.touched || eventForm.get('count_' + product.id)?.dirty)">
+                Count is required.
+              </mat-error>
+            
+              <!-- Error for invalid value (not positive integer) -->
+              <mat-error *ngIf="eventForm.get('count_' + product.id)?.hasError('min') && (eventForm.get('count_' + product.id)?.touched || eventForm.get('count_' + product.id)?.dirty)">
+                Count must be greater than 0.
+              </mat-error>
+              
+              <!-- Error for invalid pattern (e.g., non-integer values) -->
+              <mat-error *ngIf="eventForm.get('count_' + product.id)?.hasError('pattern') && (eventForm.get('count_' + product.id)?.touched || eventForm.get('count_' + product.id)?.dirty)">
+                Count must be a whole number.
+              </mat-error>
+            </mat-form-field>
+              
+            
+        
+  
+          <!-- For 'radio_with_count_remarks', show remarks input -->
+          <mat-form-field appearance="outline"  *ngIf="product.selectedOption === 'YES' || product.response_id?.response === 'YES'">
+            <mat-label>Remarks</mat-label>
+            <input matInput [formControlName]="'remarks_' + product.id">
+           </mat-form-field>
+           </div>
+
+    
+
+      </div>
+    </div>
+  </div>
+ 
+
+
+      <div *ngIf="groupedByCategory[categoryId].length === 0">
+        <p>No products available for this category.</p>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion><br>
+  
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <button mat-raised-button color="accent" type="button" (click)="onBack()">Back</button>
+    <button mat-raised-button color="primary" type="submit">Next</button>
+  </div>
+</form>
+
+<!-- <div *ngFor="let categoryId of getCategoryIds()">
+  <h3>{{ getSupportingCategoryNameById(categoryId) }}</h3>
+  <div *ngFor="let product of groupedByCategory[categoryId]">
+    <label>{{ product.category_product?.name || 'Default Category' }}</label>
+    <mat-radio-group
+      [formControlName]="'response_' + product.id"
+      (change)="onRadioChange($event, product)">
+      <mat-radio-button *ngFor="let option of product.radio_options" [value]="option">
+        {{ option }}
+      </mat-radio-button>
+    </mat-radio-group>
+    <input [formControlName]="'count_' + product.id" type="number" />
+    <textarea [formControlName]="'remarks_' + product.id"></textarea>
+  </div>
+</div> -->
+

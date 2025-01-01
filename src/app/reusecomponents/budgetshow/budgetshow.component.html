@@ -1,0 +1,51 @@
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <button mat-icon-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </div>
+  <h2 style="text-align: center;">Budget</h2>
+<ng-container *ngFor="let event of events">
+    <mat-card-content *ngIf="event.showBudget && event.budgetDetails && event.budgetDetails.length > 0">
+      <table mat-table [dataSource]="event.budgetDetails" class="mat-elevation-z8">
+  
+        <!-- Budget Category Column -->
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef> Budget Category </th>
+          <td mat-cell *matCellDef="let budget"> 
+            {{ budget?.event_budget_category?.name || 'N/A' }} 
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+  
+        <!-- Number of Items Column -->
+        <ng-container matColumnDef="nos">
+          <th mat-header-cell *matHeaderCellDef> Number of Items </th>
+          <td mat-cell *matCellDef="let budget"> 
+            {{ budget?.nos > 0 ? budget?.nos : 'N/A' }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+  
+        <!-- Amount Column -->
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef> Amount </th>
+          <td mat-cell *matCellDef="let budget"> 
+            {{ budget?.amount | currency:'INR':'symbol' || 'N/A' }} 
+          </td>
+          <!-- Footer Cell for Total Amount -->
+          <td mat-footer-cell *matFooterCellDef> 
+            <strong>Total: {{ event.totalAmount | currency:'INR':'symbol' || 'N/A' }}</strong>
+          </td>
+        </ng-container>
+  
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+        <!-- Footer Row Definition -->
+        <tr mat-footer-row *matFooterRowDef="footerColumns"></tr>
+  
+      </table>
+    </mat-card-content>
+  </ng-container>
+  

@@ -1,0 +1,97 @@
+<br>
+
+
+<form [formGroup]="eventForm" (ngSubmit)="submitVenue()">
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" class="back-arrow">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h3>Event Venue Form</h3>
+  </div>
+    <div fxLayout="row"  fxLayout.xs="column" fxLayoutGap="5px">
+      <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+        <mat-label>Event Venue</mat-label>
+        <mat-select formControlName="event_venue_id">
+          <mat-option *ngFor="let venue of eventVenues" [value]="venue.id">
+            {{ venue.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="eventForm.get('event_venue_id')?.hasError('required')">
+          Venue is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+        <mat-label>DateTime From</mat-label>
+        <input matInput [ngxMatDatetimePicker]="pickerFo" placeholder="DateTime From" formControlName="datetime_from" [min]="minDate" [max]="maxDate">
+        <mat-datepicker-toggle matSuffix [for]="$any(pickerFo)"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #pickerFo></ngx-mat-datetime-picker>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+        <mat-label>DateTime To</mat-label>
+        <input matInput [ngxMatDatetimePicker]="pickerTo" placeholder="DateTime To" formControlName="datetime_to" [min]="minDate" [max]="maxDate">
+        <mat-datepicker-toggle matSuffix [for]="$any(pickerTo)"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #pickerTo></ngx-mat-datetime-picker>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+        <mat-label>Event Type</mat-label>
+        <input matInput [value]="eventForm.get('event_type_name')?.value" readonly>
+      </mat-form-field>
+    </div>
+    
+    <div [formGroup]="eventForm" *ngIf=" timecheck && is_available">
+        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayout.xs="column" fxLayoutGap="5px">
+            <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+              <mat-label>Parent Venue</mat-label>
+              <input matInput formControlName="parent_id" readonly>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+              <mat-label>Contact Email</mat-label>
+              <input matInput formControlName="contact_email" readonly>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+              <mat-label>Title</mat-label>
+              <input matInput formControlName="title" readonly>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+              <mat-label>Contact No</mat-label>
+              <input matInput formControlName="contact_no" readonly>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex="50%" fxFlex.xs="100%" class="full-width">
+              <mat-label>Amala Project Name</mat-label>
+              <input matInput [value]="eventForm.get('project_name')?.value" readonly>
+            </mat-form-field>
+          </div>
+    </div>
+    
+  
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+      <button mat-raised-button color="primary">Submit</button>
+    </div>
+    
+   
+  </form>
+  <div *ngIf="showPopup" class="popup-overlay">
+    <div class="popup-container">
+      <div class="popup-content">
+        <h2>Event data created successfully... Need another venue?</h2>
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+          <button mat-raised-button color="primary" (click)="onPopupClose(true)">Yes</button>
+          <button mat-raised-button color="warn" (click)="onPopupClose(false)">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+              <!-- Display overlapping events if venue is not available -->
+              <div *ngIf="overlappingEvents.length > 0" class="overlapping-events">
+                <h3>Overlapping Events</h3>
+                <mat-list>
+                  <mat-list-item *ngFor="let event of overlappingEvents">
+                    <div mat-line>{{ event.title }}</div>
+                    <div mat-line>{{ event.datetime_from }} - {{ event.datetime_to }}</div>
+                  </mat-list-item>
+                </mat-list>
+              </div>
+  

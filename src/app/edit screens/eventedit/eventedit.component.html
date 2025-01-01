@@ -1,0 +1,248 @@
+<br>
+<!-- serach bar -->
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+  <!-- Back Arrow Button (aligned to the start) -->
+  <button mat-icon-button color="primary" (click)="goback()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <div fxFlex="auto"></div>
+<!-- Search Bar (Oval Shaped) -->
+<div>
+  <mat-form-field appearance="outline" >
+    <mat-label>Search Events</mat-label>
+    <mat-icon matPrefix>search</mat-icon> 
+    <input matInput [(ngModel)]="searchTerm" (ngModelChange)="onSearch()" placeholder="Search by title or description">
+    <button *ngIf="searchTerm" mat-icon-button matSuffix (click)="clearSearch()">
+      <mat-icon>clear</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+  <div fxFlex="auto"></div>
+</div>  <br>
+
+
+
+<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="25px" fxLayoutWrap>
+  
+  <mat-chip-listbox
+    aria-label="Event Status Filter"
+    [(ngModel)]="currentStatus"
+    (ngModelChange)="fetchByStatus($event)"
+    multiple="false">
+
+    <div class="chip-container">
+      <span class="badge">{{ groupedEvents?.['all'] || 0 }}</span>
+      <mat-chip-option [value]="'all'">
+        All
+      </mat-chip-option>
+    </div>
+
+    <div class="chip-container">
+      <span class="badge">{{ groupedEvents?.['scheduled'] || 0 }}</span>
+      <mat-chip-option [value]="'Scheduled'">
+        Scheduled
+      </mat-chip-option>
+    </div>
+    
+
+
+    <div class="chip-container">
+      <span class="badge">{{ groupedEvents?.['rejected'] || 0 }}</span>
+      <mat-chip-option [value]="'rejected'">
+        Rejected
+      </mat-chip-option>
+    </div>
+
+
+    <div class="chip-container">
+      <span class="badge">{{ groupedEvents?.['processing'] || 0 }}</span>
+      <mat-chip-option [value]="'processing'">
+        In Progress
+      </mat-chip-option>
+    </div>
+
+    <div class="chip-container">
+      <span class="badge">{{ groupedEvents?.['approved'] || 0 }}</span>
+      <mat-chip-option [value]="'approved'">
+        Approved
+      </mat-chip-option>
+    </div>
+
+
+    <div class="chip-container">
+      <span class="badge">{{ groupedEvents?.['completed'] || 0 }}</span>
+      <mat-chip-option [value]="'Completed'">
+        Completed
+      </mat-chip-option>
+    </div>
+
+  </mat-chip-listbox>
+</div><br>
+
+<!-- 
+<div>
+  <button
+mat-raised-button color="primary" (click)="fetchByStatus('all')" class="datebutton">
+<span class="badge">{{ groupedEvents?.['all'] || 0 }}</span>
+All
+</button>
+
+<button
+mat-raised-button color="primary" (click)="fetchByStatus('scheduled')" class="datebutton">
+<span class="badge">{{ groupedEvents?.['scheduled'] || 0 }}</span>
+Scheduled
+</button>
+
+<button
+mat-raised-button color="primary" (click)="fetchByStatus('processing')" class="datebutton">
+<span class="badge">{{ groupedEvents?.['processing'] || 0 }}</span>
+In Progress
+</button>
+
+<button
+mat-raised-button color="primary" (click)="fetchByStatus('rejected')" class="datebutton">
+<span class="badge">{{ groupedEvents?.['rejected'] || 0 }}</span>
+Rejected
+</button>
+
+
+
+<button
+mat-raised-button color="primary" (click)="fetchByStatus('approved')" class="datebutton">
+<span class="badge">{{ groupedEvents?.['approved'] || 0 }}</span>
+Approved
+</button>
+
+<button
+mat-raised-button color="primary" (click)="fetchByStatus('completed')" class="datebutton">
+<span class="badge">{{ groupedEvents?.['completed'] || 0 }}</span>
+Completed
+</button>
+</div> -->
+
+
+
+<!-- Date Range Picker -->
+<div *ngIf="currentStatus === 'Completed'"  fxLayout="row" fxLayoutGap="20px" style="margin-top: 16px;">
+
+    <mat-form-field appearance="fill">
+      <mat-label>Start Date</mat-label>
+      <input matInput [matDatepicker]="startPicker" [(ngModel)]="customStartDate">
+      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>End Date</mat-label>
+      <input matInput [matDatepicker]="endPicker" [(ngModel)]="customEndDate">
+      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <mat-datepicker #endPicker></mat-datepicker>
+    </mat-form-field>
+  
+    <button mat-raised-button color="primary" (click)="fetchDateRange('Completed')">Ok</button>
+  </div><br>
+
+<!-- matcard -->
+     <div fxLayout="row wrap" fxLayoutGap="16px" fxLayoutAlign="start start">
+      <div *ngFor="let event of paginatedEvents" fxFlex="100%" fxFlex.sm="48%" fxFlex.lg="30%" >
+        <mat-card class="example-card" appearance="outlined" (click)="showDetails(event.id)">
+          <div fxLayout="row" fxLayoutAlign="start center" class="avatar-section" fxLayoutGap="16px">
+            <app-project-avatar [projectName]="event.project?.name"></app-project-avatar>
+            <div fxLayout="row" fxLayoutGap="25px" fxLayoutAlign="start center">
+              <mat-card-title class="mat-card-title">
+                {{ event.title }}
+              </mat-card-title>
+            </div>
+          </div>
+
+         <!-- Date and Venue Information -->
+      <div class="half-circle-container" style="margin-left: auto;">
+          <div fxLayout="column" class="half-circle"  >
+            <span >{{ event.datetime_from | date: 'd MMM YYYY' }}</span>
+            <span >{{ event.datetime_from | date: 'h:mm a' }}</span>
+          </div>
+        </div>     
+
+      <mat-card-footer class="example-card-footer" fxLayout="row" style="padding: 8px;" fxLayoutGap="40px" fxLayoutAlign="space-between center" >
+               <div fxLayout="row" fxLayoutGap="12px">
+                <button mat-raised-button
+                *ngIf="event.status?.status === 'Director-Approved' || event.status?.status === 'Notified Supporting Departments'||event.status?.status === 'Completed' " 
+                color="primary"
+                (click)="approveEvent(event, 'Completed'); $event.stopPropagation()"
+                class="button-label small-button">
+                {{ event.status?.status === 'Completed' ? 'Completed' : 'Complete' }}
+                </button>
+                
+                <!-- Button for "Notified Supporting Departments" status -->
+                <button mat-raised-button
+                *ngIf="event.status?.status === 'Director-Approved' || event.status?.status === 'Notified Supporting Departments'" 
+                color="primary"
+                (click)="approveEvent(event, 'Notified Supporting Departments'); $event.stopPropagation()"
+                class="button-label small-button">
+                {{ event.status?.status === 'Notified Supporting Departments' ? 'Notified' : 'Notify' }}
+                </button>
+                
+                <button mat-stroked-button
+                color="warn"
+                *ngIf="event.status?.status !== 'Completed'"
+                (click)=" onCancel(event.id); $event.stopPropagation()"
+                [disabled]="event.status?.status === 'Cancelled' || isCancelled"
+                class="button-label small-button">
+                {{ event.status?.status === 'Cancelled' || isCancelled ? 'Cancelled' : 'Cancel' }}
+                </button>
+                </div>
+                    
+                    
+                
+                
+                  <div style="position: relative; width: 120px; height: 20px;  margin-top: 8px;" fxLayoutAlign="end center" >
+                    <span style="position: absolute; top: 0; left: 10px;">
+                      <span class="icon-circle">
+                        <mat-icon *ngIf="event.accounts_verified === 1; else notVerifiedAccount" color="accent">assured_workload</mat-icon>
+                        <ng-template #notVerifiedAccount>
+                          <mat-icon color="primary">account_balance</mat-icon>
+                        </ng-template>
+                      </span>
+                    </span>
+                  
+                
+                    <span style="position: absolute; top: 0; left: 30px;">
+                      <span class="icon-circle">
+                        <mat-icon *ngIf="event.pharmacy_verified === 1; else notVerifiedPharmacy" color="accent">medical_services</mat-icon>
+                        <ng-template #notVerifiedPharmacy>
+                          <mat-icon color="primary">medical_services</mat-icon>
+                        </ng-template>
+                      </span>
+                    </span>
+                  
+                
+                    <span style="position: absolute; top: 0; left: 50px;">
+                      <span class="icon-circle">
+                        <mat-icon *ngIf="event.purchace_verified === 1; else notVerifiedPurchase" color="accent">shopping_bag</mat-icon>
+                        <ng-template #notVerifiedPurchase>
+                          <mat-icon color="primary">shopping_bag</mat-icon>
+                        </ng-template>
+                      </span>
+                    </span>
+                    </div>
+                    </mat-card-footer>
+
+    
+
+
+
+        </mat-card>
+      </div>
+    </div>
+
+        
+       
+
+    
+
+    <mat-paginator
+    [length]="events.length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)">
+  </mat-paginator>

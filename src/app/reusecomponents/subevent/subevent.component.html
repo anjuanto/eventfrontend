@@ -1,0 +1,20 @@
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <button mat-icon-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </div>
+  
+  <ng-container *ngFor="let event of events"> 
+      <div *ngIf="event.children.length > 0" fxLayoutGap="16px">
+        <div *ngFor="let child of event.children; let i = index">
+          <mat-card (click)="showDetails(child.id)">
+            <mat-card-header>
+              <mat-card-title>
+                Event Sub {{ i + 1 }}: {{ child.title || 'Unnamed Project' }}
+              </mat-card-title>
+            </mat-card-header>
+      
+          </mat-card>
+        </div>
+      </div>
+      

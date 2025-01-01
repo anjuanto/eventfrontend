@@ -1,0 +1,103 @@
+
+  .row-gap {
+    margin-left: 20px;
+  }
+
+  .custom-background {
+    background-color: transparent; /* Transparent background */
+    width: 100%;
+    border: none; /* Remove default border if needed */
+  }
+
+
+
+
+  
+
+  
+  mat-form-field .mat-form-field-infix {
+    padding-right: 40px; /* Adds padding to the right to accommodate the icon */
+  }
+  
+
+  .submit-button-container {
+    margin-top: 20px;
+  }
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+
+.header-icon {
+  font-size: 24px; /* Adjust the icon size */
+  margin-right: 10px; /* Space between the icon and the heading */
+  color: #3f51b5; /* Adjust the color of the icon */
+}
+.header-title {
+  margin: 0; /* Remove default margin */
+  font-size: 24px; /* Adjust the font size */
+  color: #333; /* Adjust the color */
+}
+.no-border {
+  border: none; /* Remove the border */
+  box-shadow: none; /* Remove the box shadow */
+}
+
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(226, 224, 224, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.container {
+  background-color: #f0f0f0; /* Light gray background */
+  padding: 16px;
+  margin: 20px;
+  height: 600px;
+}
+
+.large-button-parent-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  font-weight: bold;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-transform: none; /* Keeps the button text as it is without converting to uppercase */
+}
+
+.large-icon-pf {
+  margin-bottom: 8px;
+}
+
+.large-button:hover {
+  background-color: #e0e0e0; /* Light gray on hover */
+}
+mat-list-item {
+  padding: 16px;
+}
+
+p[matLine] {
+  margin: 0;
+}

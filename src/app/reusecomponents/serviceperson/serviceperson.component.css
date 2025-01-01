@@ -1,0 +1,12 @@
+
+  
+  .user-details {
+    flex: 1 1 200px; /* Allows wrapping and setting minimum size */
+
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .department-card {
+    margin-bottom: 20px; /* Adjust the value as needed */
+  }
+  

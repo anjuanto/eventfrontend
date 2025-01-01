@@ -1,0 +1,125 @@
+<br><form [formGroup]="eventForm">
+  <div fxLayout="row" fxLayoutAlign="center center" fxLayout.xs="column" fxLayout.gt-xs="row" fxLayoutGap.gt-xs="25px" fxLayoutGap.xs="0px">
+    
+    <mat-form-field appearance="outline" fxFlex.xs="100%" fxFlex.gt-xs="50%">
+      <mat-label>Category</mat-label>
+      <mat-select formControlName="event_budget_category_id" (selectionChange)="onCategorySelectionChange($event.value)">
+        <mat-option *ngFor="let category of budgetCategories" [value]="category.id">
+          {{ category.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" fxFlex.gt-xs="50%">
+      <mat-label>Amount</mat-label>
+      <input matInput formControlName="amount" type="number">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" fxFlex.gt-xs="50%">
+      <mat-label>Number of Items</mat-label>
+      <input matInput formControlName="nos" type="number">
+    </mat-form-field>
+
+    <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap.gt-xs="50px" fxLayoutGap.xs="0px">
+      <button mat-mini-fab color="primary" (click)="editingIndex === null ? addExpense() : saveEditedExpense()">
+        <mat-icon>{{ editingIndex === null ? 'add' : 'save' }}</mat-icon>
+      </button>
+    </div>
+  </div>
+</form>
+
+
+
+<!-- 
+<div *ngIf="Budgetdetail.length > 0">
+  <h3>Expenses</h3>
+  <table mat-table [dataSource]="Budgetdetail">
+    
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef> Category </th>
+      <td mat-cell *matCellDef="let expense"> {{ getCategoryName(expense.event_budget_category_id) }} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> Amount </th>
+      <td mat-cell *matCellDef="let expense"> {{ expense.amount }} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="nos">
+      <th mat-header-cell *matHeaderCellDef> Number of Items </th>
+      <td mat-cell *matCellDef="let expense"> {{ expense.nos }} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let expense; let i = index">
+        <button mat-button color="accent" (click)="editExpense(expense, i)">Edit</button>
+        <button mat-button color="warn" (click)="deleteExpense(i)">Delete</button>
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="['category', 'amount', 'nos', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['category', 'amount', 'nos', 'actions'];"></tr>
+  </table>
+
+
+  <h4>Total Amount: {{ total }}</h4><br><br>
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+
+    <button mat-raised-button color="accent" type="button" (click)="onBack()">Back</button>
+
+    <button mat-raised-button color="primary" (click)="saveExpenses()">Save</button>
+  </div>
+</div> -->
+
+<div *ngIf="Budgetdetail.length > 0; else noExpenses">
+  <h3>Expenses</h3>
+  <table mat-table [dataSource]="Budgetdetail">
+    
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef> Category </th>
+      <td mat-cell *matCellDef="let expense"> {{ getCategoryName(expense.event_budget_category_id) }} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> Amount </th>
+      <td mat-cell *matCellDef="let expense"> {{ expense.amount }} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="nos">
+      <th mat-header-cell *matHeaderCellDef> Number of Items </th>
+      <td mat-cell *matCellDef="let expense"> {{ expense.nos }} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let expense; let i = index">
+        <button mat-button color="accent" (click)="editExpense(expense, i)">Edit</button>
+        <button mat-button color="warn" (click)="deleteExpense(i)">Delete</button>
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="['category', 'amount', 'nos', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['category', 'amount', 'nos', 'actions'];"></tr>
+  </table>
+
+  <h4>Total Amount: {{ total }}</h4><br><br>
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <button mat-raised-button color="accent" type="button" (click)="onBack()">Back</button>
+    <button mat-raised-button color="primary" (click)="saveExpenses()">Save</button>
+  </div>
+</div>
+
+<ng-template #noExpenses>
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <button mat-raised-button color="accent" type="button" (click)="onBack()">Back</button>
+    <button mat-raised-button color="primary" (click)="handleEmptySave()">Save</button>
+  </div>
+
+
+</ng-template>
+
+
+
+  
+  

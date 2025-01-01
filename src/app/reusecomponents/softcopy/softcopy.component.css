@@ -1,0 +1,36 @@
+.softcopy-details {
+    margin-bottom: 20px; /* Spacing between events */
+  }
+  
+  .softcopy-box {
+    display: flex;
+    align-items: center; /* Center items vertically */
+    border: 1px solid #ccc; /* Optional border */
+    padding: 8px; /* Padding around each softcopy box */
+    border-radius: 4px; /* Rounded corners */
+  }
+  
+  .thumbnail {
+    width: 80px; /* Adjust thumbnail width */
+    height: 60px; /* Adjust thumbnail height */
+    object-fit: cover; /* Maintain aspect ratio */
+    margin-right: 10px; /* Space between image and text */
+  }
+  
+  .file-name {
+    margin-left: 8px; /* Space between icon and file name */
+    text-decoration: none; /* Remove underline */
+    color: #3f51b5; /* Link color */
+  }
+  
+  .file-name:hover {
+    text-decoration: underline; /* Underline on hover */
+  }
+  
+  .file-count-button {
+    margin-left: 10px; /* Space between files and button */
+  }
+  .event-report {
+    padding-left: 20px; /* Adjust the value as needed */
+ 
+  }

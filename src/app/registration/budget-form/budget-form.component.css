@@ -1,0 +1,60 @@
+
+  .expense-list {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .amount {
+    text-align: right;
+    width: 100%;
+  }
+  .list-container {
+    max-height: 400px; /* Adjust as needed to show more lines */
+    overflow-x: auto; /* Adds scroll if content overflows */
+  }
+  .expense-list{
+    display: flex;
+    max-height: 200px;
+    overflow-y:auto;
+   /* width: 350px;  */
+  }
+  .expense-list-container {
+    max-height: 200px; /* Set a fixed width for the container */
+
+    overflow-x: hidden; /* Enable horizontal scrolling if content overflows */
+    overflow-y: auto; /* Prevent vertical scrolling */
+ 
+  }
+  mat-list {
+    max-height: 250px; /* Set the maximum height for the list */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Hide any horizontal overflow */
+    display: block; /* Ensure it takes the full width of the container */
+}
+
+.expense-list-container {
+    width: 100%;
+    overflow: hidden; /* Ensure the container doesn't overflow horizontally */
+}
+
+mat-list-item {
+    display: block; /* Make sure each item stacks vertically */
+    width: 100%; /* Ensure each item takes full width of the container */
+    box-sizing: border-box; /* Ensure padding and borders are included in width */
+}
+
+.amount {
+    display: inline-block;
+    width: auto; /* Adjust the width based on the content */
+    text-align: right;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+.full-width {
+    
+  width: 100%;
+}
+
+
+
+  

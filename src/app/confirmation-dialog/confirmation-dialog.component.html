@@ -1,0 +1,8 @@
+<h1 mat-dialog-title fxLayoutAlign="center center" >Confirmation Box</h1>
+<div mat-dialog-content class="color">
+  <p>{{ data.message }}</p>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+  <button mat-button (click)="onCancel()">No</button>
+  <button mat-raised-button color="warn" (click)="onConfirm()">Yes</button>
+</div>

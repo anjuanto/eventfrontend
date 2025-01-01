@@ -1,0 +1,64 @@
+.event-icon-circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e0e0e0; /* Light gray background for the circle */
+  color: #415dd8; /* Text color */
+  font-size: 14px; /* Adjust font size */
+  font-weight: bold;
+  margin-right: 10px; /* Space between icon and title */
+  text-transform: uppercase; /* Capitalize the letters */
+  box-shadow: 0 2px 5px #1976d2 ;
+}
+
+.event-card {
+  border: 1px solid #bbbbcf; /* Light gray border */
+  border-radius: 8px; /* Optional: Adds rounded corners */
+  padding: 16px; /* Optional: Adds padding inside the card */
+  margin-bottom: 16px; /* Optional: Adds space between cards */
+  box-shadow: 0 2px 5px #1976d2 ;
+}
+
+.title-container {
+  width: 100%; /* Ensures each container takes full width */
+  padding: 12px 16px;
+
+  background-color: #f9f9f9;
+  text-align: left;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  cursor: pointer;
+}
+
+
+.title-container.active {
+  background-color: #2196F3;
+  color: rgb(17, 16, 16); 
+  font-weight: bold; 
+}
+
+
+.title-container:hover {
+  background-color: #e0e0e0; 
+}
+
+/* mat-card-title {
+  font-size: 14px; 
+} */
+
+.title-container.active {
+  background-color: lightblue; 
+}
+
+
+.chip-item {
+
+  margin-right: 8px; 
+  margin-bottom: 8px;
+}
+.selected-chip {
+  background-color: lightblue !important; /* Example: green when selected */
+  color: rgb(7, 7, 7) !important;             /* White text when selected */
+}

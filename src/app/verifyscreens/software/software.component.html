@@ -1,0 +1,147 @@
+<br>
+<!-- Back Arrow Icon for Navigation -->
+<div>
+  <mat-icon (click)="navigateBack()" >arrow_back</mat-icon>
+</div>
+
+<div *ngIf="incharge; else noAccess">
+  <h2 style="text-align: center;">Department in charge</h2>
+
+<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+  <mat-form-field appearance="outline">
+    <mat-label>Search events...</mat-label>
+    <input
+      matInput
+      type="text"
+      placeholder="Search events..."
+      (input)="onSearch($event)"
+      class="search-input"
+    />
+  </mat-form-field>
+</div>
+
+
+    <div class="date-container" fxLayout="row" fxLayoutGap="5px">
+      <button mat-raised-button color="primary" (click)="ngOnInit()" class="datebutton">All</button>
+      <button mat-raised-button color="primary" (click)="setDateRangeAndFetchEvents('today')"class="datebutton">Today</button>
+      <button mat-raised-button color="primary" (click)="setDateRangeAndFetchEvents('week')" class="datebutton">Week</button>
+      <button mat-raised-button color="primary" (click)="setDateRangeAndFetchEvents('month')" class="datebutton">Month</button>
+      <button mat-raised-button color="primary" (click)="toggleCustomDatePickers()" class="datebutton">Completed</button>
+    </div>
+    
+    <div *ngIf="showCustomDatePickers" fxLayout="row" fxLayoutGap="20px" style="margin-top: 16px;">
+      <mat-form-field appearance="fill">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="startPicker" [(ngModel)]="customStartDate">
+        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+    
+      <mat-form-field appearance="fill">
+        <mat-label>End Date</mat-label>
+        <input matInput [matDatepicker]="endPicker" [(ngModel)]="customEndDate">
+        <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+    
+      <button mat-raised-button color="primary" (click)="setDateRangeAndFetchEvents('custom')">Ok</button>
+    </div><br>
+
+
+    <div fxLayout="row wrap" fxLayoutGap="16px" fxLayoutAlign="start stretch" fxLayout.xs="column">
+    <div *ngFor="let event of updatePaginatedEvents()" fxFlex="100%" fxFlex.sm="48%" fxFlex.md="31%" fxFlex.lg="20%" fxFlex.xl="23%">
+      <mat-card class="event-card" (click)="goToGroupDetails(event.id)">
+        <mat-card-header>
+          <div fxLayout="row" fxLayoutGap="16px">
+            <app-project-avatar [projectName]="event?.eventMaster?.project?.name"></app-project-avatar>
+            <div fxLayout="column" fxLayoutAlign="start start">
+              <!-- Event Title -->
+              <mat-card-title class="title">{{ event?.eventMaster?.title }}</mat-card-title>
+          
+              <!-- Venue Name below the title -->
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon aria-label="Venue Icon" style="margin-right: 8px;">location_on</mat-icon>
+                <span>{{ event?.eventMaster?.event_venue.name }}</span>
+              </div>
+            </div>
+          </div>
+         
+        </mat-card-header>
+        
+      
+        <mat-card-content>
+          <div class="half-circle-container" style="margin-left: auto;">
+            <div fxLayout="column" class="half-circle">
+              <span>{{ event?.eventMaster?.datetime_from | date: 'd MMM YYYY' }}</span>
+              <span>{{ event?.eventMaster?.datetime_from | date: 'h:mm a' }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      
+        <!-- <mat-card-footer fxLayout="row" fxLayoutAlign="space-between center" style="margin-top: 8px;" fxLayoutGap="16px" >
+        <div *ngIf="assignedUsers[event?.eventMaster?.id]?.length" >
+          <mat-icon aria-label="Users Icon" style="margin-right: 8px;">people</mat-icon>
+          <span *ngFor="let user of assignedUsers[event?.eventMaster?.id]">
+            {{ user.user.name }} 
+            <span *ngIf="user !== assignedUsers[event?.eventMaster?.id].slice(-1)">, </span>
+          </span>
+        </div>
+      </mat-card-footer> -->
+
+
+      <mat-card-footer fxLayout="row" fxLayoutAlign="space-between center" style="margin-top: 8px;" fxLayoutGap="16px">
+        <div *ngIf="assignedUsers[event?.eventMaster?.id]?.length">
+          <div fxLayout="column">
+            <div fxLayout="row">
+              <mat-icon aria-label="Users Icon" style="margin-right: 8px;">people</mat-icon>
+              <span>{{ assignedUsers[event?.eventMaster?.id][0]?.user.name }}</span>
+              <span *ngIf="assignedUsers[event?.eventMaster?.id][0]?.department_id">
+                ({{ assignedUsers[event?.eventMaster?.id][0]?.department.departmentName }})
+              </span>
+              <ng-container *ngIf="assignedUsers[event?.eventMaster?.id]?.length > 1 && !showAllUsers">
+                <span class="extra-users-circle" (click)="showAllUsers = !showAllUsers">
+                  +{{ assignedUsers[event?.eventMaster?.id].length - 1 }}
+                </span>
+              </ng-container>
+            </div>
+          
+
+            <div *ngIf="showAllUsers">
+              <span *ngFor="let user of assignedUsers[event?.eventMaster?.id].slice(1); let last = last">
+                {{ user.user.name }}
+                
+                <!-- Show department_id for each user in the list -->
+                <span *ngIf="user.department_id">
+                  ({{ user.department.departmentName }})
+                </span>
+      
+                <span *ngIf="!last">, </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </mat-card-footer>
+      
+      
+      
+      </mat-card>
+      
+    </div>
+    </div>
+    
+  </div>
+
+  
+  
+  <ng-template #noAccess>
+    <h2>{{ message }}</h2>
+  </ng-template>
+
+  <mat-paginator
+        [length]="totalItems"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[2, 10, 20]"
+        (page)="onPageChange($event)"
+        showFirstLastButtons
+        style="display: flex; justify-content: center; margin-top: 20px;">
+      </mat-paginator>

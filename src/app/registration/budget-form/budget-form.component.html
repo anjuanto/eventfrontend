@@ -1,0 +1,66 @@
+<form [formGroup]="formGroup"><br>
+  <div fxLayout="row" fxLayoutAlign="center center" fxLayout.xs="column" fxLayoutGap="5px" >
+    
+    <mat-form-field appearance="outline" fxFlex.xs="100%" fxFlex.gt-xs="50%">
+      <mat-label>Category</mat-label>
+      <mat-select formControlName="event_budget_category_id" (selectionChange)="onCategorySelectionChange($event.value)">
+        <mat-option *ngFor="let category of budgetCategories" [value]="category.id" [disabled]="disabledCategories.includes(category.id)">
+          {{ category.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+
+  <mat-form-field appearance="outline" fxFlex.gt-xs="50">
+    <mat-label>Amount</mat-label>
+    <input
+      matInput
+      [formControl]="formGroup.get('amount')"
+      [readonly]="isAmountReadonly"
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline"  fxFlex.gt-xs="50">
+    <mat-label>Number of Items</mat-label>
+    <input matInput formControlName="nos" type="number">
+  </mat-form-field>
+
+  <button  mat-mini-fab color="primary" (click)="addExpense()" >
+    <mat-icon>add</mat-icon>
+  </button>
+
+  </div>
+</form>
+
+<div *ngIf="expenses.length > 0">
+  <h3>Expenses</h3>
+  <table mat-table [dataSource]="expenses">
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef> Category </th>
+      <td mat-cell *matCellDef="let expense"> {{ getCategoryName(expense.event_budget_category_id) }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> Amount </th>
+      <td mat-cell *matCellDef="let expense"> {{ expense.amount }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nos">
+      <th mat-header-cell *matHeaderCellDef> Number of Items </th>
+      <td mat-cell *matCellDef="let expense"> {{ expense.nos }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let expense; let i = index">
+        <button mat-button color="accent" (click)="editExpense(expense, i)">Edit</button>
+        <button mat-button color="warn" (click)="deleteExpense(i)">Delete</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['category', 'amount', 'nos', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['category', 'amount', 'nos', 'actions'];"></tr>
+  </table>
+
+  <h4>Total Amount: {{ totalAmount }}</h4>
+</div>

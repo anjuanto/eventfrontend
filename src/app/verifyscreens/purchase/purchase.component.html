@@ -1,0 +1,96 @@
+<br>
+<div fxLayout="row"  fxLayoutGap="5px">
+<button mat-icon-button color="primary" (click)="goBack()">
+ <mat-icon>arrow_back</mat-icon>
+</button>
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="margin: 16px 0;">
+  <mat-form-field appearance="outline" fxFlex>
+    <mat-label>Search Events</mat-label>
+    <input matInput [(ngModel)]="searchTerm" (input)="filterEvents()" placeholder="Search by title or venue" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+</div>
+
+</div>
+
+<h2 style="text-align: center;"> Purchase Events</h2>
+<div class="date-container" fxLayout="row" fxLayoutGap="5px">
+  <button mat-raised-button color="primary" (click)="ngOnInit()" class="datebutton">All</button>
+  <button mat-raised-button color="primary" (click)="setDateRangeAndFetchEvents('today')"class="datebutton">Today</button>
+  <button mat-raised-button color="primary" (click)="setDateRangeAndFetchEvents('week')" class="datebutton">Week</button>
+  <button mat-raised-button color="primary" (click)="setDateRangeAndFetchEvents('month')" class="datebutton">Month</button>
+  <button mat-raised-button color="primary" (click)="toggleCustomDatePickers()" class="datebutton">Custom</button>
+</div>
+
+<div *ngIf="showCustomDatePickers" fxLayout="row" fxLayoutGap="20px" style="margin-top: 16px;">
+  <mat-form-field appearance="fill">
+    <mat-label>Start Date</mat-label>
+    <input matInput [matDatepicker]="startPicker" [(ngModel)]="customStartDate">
+    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+    <mat-datepicker #startPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>End Date</mat-label>
+    <input matInput [matDatepicker]="endPicker" [(ngModel)]="customEndDate">
+    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+    <mat-datepicker #endPicker></mat-datepicker>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="setDateRangeAndFetchEvents('custom')">Ok</button>
+</div><br>
+<div *ngIf="eventsData.length > 0"  fxLayout="row wrap" fxLayoutGap="16px" fxLayoutAlign="start stretch" fxLayout.xs="column">
+  <div *ngFor="let event of paginatedEvents" fxFlex="100%" fxFlex.sm="48%" fxFlex.md="31%" fxFlex.lg="30%" fxFlex.xl="23%">
+    <mat-card class="event-card" (click)="showevent(event.id)">
+      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="3px">
+        <app-project-avatar [projectName]="event.project?.name"></app-project-avatar>
+        <div>
+          <mat-card-header>
+            <div fxLayout="column">
+              <mat-card-title>{{ event.title }}</mat-card-title>
+              <div style="display: flex; align-items: center;">
+                <mat-icon aria-label="Venue Icon" style="margin-right: 8px;">location_on</mat-icon>
+                {{ event.event_venue.name }}
+              </div>
+              <mat-card-subtitle>
+              </mat-card-subtitle>
+            </div>
+          </mat-card-header>
+        </div>
+
+        <div>
+          <mat-card-content>
+            
+            <div class="date-container" fxLayoutGap="5px" >
+              <div class="date-day">
+                {{ event.datetime_from | date: 'd' }}
+              </div>
+              <div class="date-details">
+                <div class="month-year">{{ event.datetime_from | date: 'MMM' }}</div>
+              </div>
+            </div>
+            <div class="time" style="margin-top: 10px;">{{ event.datetime_from | date: 'shortTime' }} - {{ event.datetime_to | date:'shortTime' }}</div>
+          </mat-card-content>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+
+<mat-card *ngIf="eventsData.length === 0">
+  <mat-card-header>
+    <mat-card-title>No events found</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>No events match your search criteria.</p>
+  </mat-card-content>
+</mat-card>
+  <!-- Angular Material Paginator -->
+  <mat-paginator
+    [length]="eventsData.length"
+    [pageSize]="5"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="handlePageChange($event)"
+  >
+  </mat-paginator>

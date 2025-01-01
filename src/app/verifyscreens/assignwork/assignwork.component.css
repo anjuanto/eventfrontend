@@ -1,0 +1,31 @@
+.date-container {
+    display: flex;
+    align-items: center;
+    padding-bottom: 0px;
+  }
+  
+  .date-day {
+    font-size: 3rem; /* Large size for the day number */
+    font-weight: bold;
+    margin-right: 10px; /* Space between day and month */
+    color: #000; /* Optional color */
+  }
+  
+  .date-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  
+  .month-year {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #1d1616;
+  }
+  
+  .time {
+    padding: 1px;
+    font-size: 1rem;
+    color: #0e0b0b;
+  }
+ 

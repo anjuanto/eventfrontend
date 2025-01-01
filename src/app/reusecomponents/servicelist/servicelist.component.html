@@ -1,0 +1,55 @@
+
+
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <button mat-icon-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </div>
+  <h2 style="text-align: center;">Service</h2>
+
+  <div #contentToConvert>
+  <ng-container *ngFor="let event of events">
+    <mat-card-content *ngIf="event.productDetails?.length > 0"> 
+      <table mat-table [dataSource]="event.productDetails" class="mat-elevation-z8">
+        
+        <!-- Product Name Column -->
+        <ng-container matColumnDef="productName">
+          <th mat-header-cell *matHeaderCellDef>Product Name</th>
+          <td mat-cell *matCellDef="let product"> 
+            {{ product.category_product?.name || 'N/A' }} 
+          </td>
+        </ng-container>
+    <!-- Quantity and Response Column -->
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef>Quantity & Response</th>
+      <td mat-cell *matCellDef="let product">
+        <!-- Display response above quantity -->
+        <div>{{ product.response_id?.response  }}</div>
+        <div>{{ product.count }}</div>
+      </td>
+    </ng-container>
+    
+
+    
+        <!-- Remarks Column -->
+        <ng-container matColumnDef="remarks">
+          <th mat-header-cell *matHeaderCellDef>Remarks</th>
+          <td mat-cell *matCellDef="let product"> 
+            {{ product.remarks || 'N/A' }} 
+          </td>
+        </ng-container>
+    
+        <!-- Header Row -->
+        <tr mat-header-row *matHeaderRowDef="['productName', 'quantity', 'remarks']"></tr>
+        <!-- Data Row -->
+        <tr mat-row *matRowDef="let row; columns: ['productName', 'quantity', 'remarks'];"></tr>
+      </table>
+   
+   
+    </mat-card-content>
+  </ng-container>
+</div><br>
+
+<!-- <button mat-raised-button color="primary" (click)=" generatePDF()">Convert to PDF</button> -->
+<!-- <button mat-raised-button color="accent" (click)="printPage()">Print</button> -->
+  

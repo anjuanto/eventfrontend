@@ -1,0 +1,10 @@
+.response-yes {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .response-no {
+    color: red;
+    font-weight: bold;
+  }
+  

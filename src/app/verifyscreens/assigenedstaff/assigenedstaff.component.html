@@ -1,0 +1,114 @@
+<br>
+  <div>
+    <mat-icon (click)="goBack()" >arrow_back</mat-icon>
+  </div>
+
+  <h2 style="text-align: center; ">Assigned Staff</h2>
+  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+    <mat-form-field appearance="outline">
+      <mat-label>Search events...</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Search events..."
+        (input)="onSearch($event)"
+        class="search-input"
+      />
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="5px">
+
+    <button mat-raised-button color="primary" (click)="setDateRangeAndFetchEvents('all')" class="datebutton">
+    All
+   </button>
+    <button mat-raised-button color="primary" (click)="setDateRangeAndFetchEvents('today')" class="datebutton">
+    Today
+   </button>
+    
+    <button mat-raised-button color="primary" (click)="setDateRangeAndFetchEvents('week')" class="datebutton" >
+      Week
+    </button>
+
+    <button mat-raised-button color="primary" (click)="setDateRangeAndFetchEvents('month')" class="datebutton" >
+      Month
+    </button>
+
+    <button mat-raised-button color="primary" (click)="toggleCustomDatePickers()" class="datebutton">
+      Completed
+    </button>
+  </div>
+  
+  <div *ngIf="showCustomDatePickers" fxLayout="row" fxLayoutGap="20px" style="margin-top: 16px;">
+    <mat-form-field appearance="fill">
+      <mat-label>Start Date</mat-label>
+      <input matInput [matDatepicker]="startPicker" [(ngModel)]="customStartDate">
+      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>End Date</mat-label>
+      <input matInput [matDatepicker]="endPicker" [(ngModel)]="customEndDate">
+      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <mat-datepicker #endPicker></mat-datepicker>
+    </mat-form-field>
+  
+    <button mat-raised-button color="primary" (click)="setDateRangeAndFetchEvents('custom')">Ok</button>
+  </div><br>
+
+
+  <div *ngIf="assignedUserDetails.length > 0; else noData" 
+    fxLayout="row wrap" 
+    fxLayoutGap="16px" 
+    fxLayout.xs="column">
+
+    <div *ngFor="let item of AssignedUserDetails" fxFlex="100%" fxFlex.sm="48%" fxFlex.md="31%" fxFlex.lg="20%" fxFlex.xl="23%">
+      <mat-card (click)="onCardClick(item.event_master?.id)">  <!-- Pass the event_master object -->
+        <mat-card-header class="header">
+          <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;">
+            <div fxLayout="row" fxLayoutGap="10px">
+              <app-project-avatar [projectName]="item.event_master?.project?.name"></app-project-avatar>
+              <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                <mat-card-title class="mat-card-title">{{ item.event_master?.title || 'Unknown Title' }}</mat-card-title>
+                <span style="display: flex; align-items: center; font-size: 14px; color: #666;">
+                  <mat-icon style="font-size: 16px; margin-right: 4px;">place</mat-icon>
+                  {{ item.event_master?.event_venue?.name || 'N/A' }}
+                </span>
+              </div>
+            </div>
+            <div class="half-circle-container">
+              <div class="half-circle">
+                <span class="time">{{ item.event_master?.datetime_from | date: 'h:mm a' }}</span>
+                <span class="day">{{ item.event_master?.datetime_from | date: 'd MMM' }}</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-header>
+      
+   <!-- Card Footer with Department on Left and Status on Right -->
+   <mat-card-footer style="padding: 16px;" fxLayout="row" fxLayoutAlign="space-between center">
+    <!-- Department Name (Left side) -->
+    <div style="display: flex; align-items: center; font-size: 14px; color: #080808;">
+      <mat-icon style="font-size: 16px; margin-right: 4px;">business</mat-icon>
+      {{ item.department?.departmentName || 'No Department' }}
+    </div>
+
+    <!-- Status (Right side) -->
+    <div style="display: flex; align-items: center; font-size: 14px; color: #080808;">
+      <mat-icon style="font-size: 16px; margin-right: 4px;">check_circle</mat-icon>
+      {{ item.event_master?.status.status || 'Unknown Status' }}
+    </div>
+  </mat-card-footer>
+      </mat-card>
+    </div>
+  </div>
+  
+  <ng-template #noData>
+    <p style="text-align: center; font-size: 16px; color: #888;">No data available</p>
+  </ng-template>
+
+  <mat-paginator [length]="totalItems" [pageSize]="pageSize" [pageSizeOptions]="[2, 5, 10, 20, 50]"
+  (page)="onPageChange($event)" style="margin-top: 20px;">
+</mat-paginator>
+

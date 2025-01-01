@@ -1,0 +1,72 @@
+
+
+<div class="upload-container">
+  <!-- Display all events with their associated files -->
+  <div *ngFor="let event of events" class="event-container">
+ 
+
+    <!-- File input field for selecting files -->
+    <button mat-raised-button color="primary" (click)="fileInput.click()">Upload Files</button>
+    <input #fileInput type="file" (change)="onFileSelected($event, event)" multiple hidden />
+
+    <!-- Display selected file names for the current event -->
+    <div *ngIf="selectedFileNames.length > 0 && selectedEvent?.id === event.id" class="file-list">
+
+        <div *ngFor="let file of selectedFiles; let i = index" style="display: flex; align-items: center;">
+          <!-- Display image if file is an image -->
+          <ng-container *ngIf="file.type.startsWith('image/'); else nonImageFile">
+            <img [src]="file.url" alt="{{ file.name }}" style="max-width: 200px; max-height: 200px;" />
+          </ng-container>
+
+          <!-- Template for non-image files -->
+          <ng-template #nonImageFile>
+            <span style="flex-grow: 1;">{{ file.name }}</span>
+          </ng-template>
+
+          <!-- Delete button in the same row -->
+          <button mat-icon-button color="warn" (click)="deleteFile(i)" matTooltip="Delete File">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+ 
+
+      <!-- Upload Button -->
+      <button mat-icon-button color="primary" matTooltip="Upload File" (click)="uploadFiles(event)">
+        <mat-icon>cloud_upload</mat-icon>
+      </button>
+    </div>
+
+    <div *ngIf="event?.softcopyDetails && event.softcopyDetails.length > 0">
+      <div *ngFor="let softcopy of event.softcopyDetails" style="display: flex; align-items: center; gap: 10px;">
+        <!-- Image Preview -->
+        <ng-container *ngIf="softcopy.mime.startsWith('image/'); else otherFile">
+          <img [src]="softcopy.fileUrl" alt="{{ softcopy.original_filename }}" 
+               style="max-width: 100px; max-height: 100px; object-fit: contain;" />
+        </ng-container>
+    
+          <!-- Fallback for Non-Image Files -->
+          <ng-template #otherFile>
+            <div>
+              <span>{{ softcopy.original_filename }}</span>
+              <a [href]="softcopy.fileUrl" target="_blank">Download</a>
+            </div>
+          </ng-template><br>
+          
+       <!-- Delete Button -->
+         <button mat-icon-button color="warn" (click)="deleteSoftcopy(softcopy.id)" matTooltip="Delete File">
+         <mat-icon>delete</mat-icon>
+         </button>
+         </div>
+     
+</div>
+    
+    
+
+    <!-- Show message if no softcopy details are available -->
+    <div *ngIf="!event.softcopyDetails || event.softcopyDetails.length === 0">
+      <p>No softcopy details available.</p>
+    </div>
+
+    <hr />
+  </div>
+</div>

@@ -1,0 +1,134 @@
+.card-container {
+    margin-bottom: 16px; /* Adds space between cards */
+  }
+  
+  .mat-card {
+    margin-bottom: 16px; /* Adds gap at the bottom of each card */
+    box-shadow: 0 0 5px rgba(0.2, 0.2, 0.2, 0.2) !important;
+  }
+  .avatar {
+    width: 50px; /* Adjust size as needed */
+    height: 50px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+  }
+  
+  .half-circle-container {
+    position: relative; /* Ensures it aligns with mat-card */
+    display: flex;
+    align-items: center; /* Center content vertically */
+    justify-content: flex-end; /* Align the half-circle to the right */
+    height: 100%; /* Matches the card header's height */
+    top: 1px; /* Adjust top distance from the edge */
+    right: 0px;
+  }
+  
+  .half-circle {
+    position: relative; /* Contains the text inside */
+    width: 70px;
+    height: 60px;
+    background-color: #ccdbf5;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    display: flex; /* Flexbox for centering content */
+    flex-direction: column; /* Align items vertically */
+    justify-content: center; /* Center text vertically */
+    align-items: center; /* Center text horizontally */
+  }
+  
+  .half-circle .time {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0; /* Remove unwanted spacing */
+  }
+  
+  .half-circle .day {
+    font-size: 10px;
+    margin: 0; /* Remove unwanted spacing */
+  }
+  .mat-mdc-card-header {
+    display: inline;
+    padding: 16px 0 16px;
+}
+.title {
+  font-weight: bold;
+  color: #070808 !important;
+  white-space: nowrap;        
+  text-overflow: ellipsis;
+  display: block; /* Ensure it's a block element */
+  max-width: 150px;  /* Set the max width */
+  overflow: hidden;  /* Hide the overflowing content */
+}
+
+mat-card {
+  margin-bottom: 20px;
+  box-shadow: 0px 6px 12px rgba(0.3, 0.3, 0.3, 0.3); 
+  padding: 16px; 
+}
+.half-circle-container {
+  align-items: center; /* Center content vertically */
+  justify-content: flex-end; /* Align the half-circle to the right */
+  height: 100%; /* Matches the card header's height */
+  position: absolute;
+  top: 1px; /* Adjust top distance from the edge */
+  right: 2px; /* Adjust right distance from the edge */
+  z-index: 1;
+}
+.half-circle {
+  position: relative; /* Contains the text inside */
+  width: 90px;
+  height: 50px;
+  background-color: #ccdbf5;
+  box-shadow: 5px 5px 5px rgba(14, 14, 15, 0.2);
+  display: flex; /* Flexbox for centering content */
+  flex-direction: column; /* Align items vertically */
+  justify-content: center; /* Center text vertically */
+  align-items: center; /* Center text horizontally */
+
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.adjusted-button {
+  min-width: 50px; /* Set a minimum width for uniform button size */
+  height: 40px; /* Adjust the height */
+  font-size: 14px; /* Adjust the font size */
+  text-transform: none; /* Optional: Disable uppercase text transformation */
+  padding: 8px 16px; /* Adjust padding for consistent spacing */
+}
+.datebutton{
+  border-radius: 20px; 
+}
+
+.search-input-field {
+  width: 50%;  /* 50% width on large screens */
+  max-width: 600px;  /* Maximum width for larger screens */
+}
+
+@media (max-width: 768px) {
+  .search-input-field {
+    width: 90%;  /* 90% width on smaller screens */
+  }
+}
+.search-input {
+  width: 100%;  /* Ensures the input field fills the form field */
+}
+.extra-users-circle {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-size: 14px;
+  margin-left: 8px;
+}

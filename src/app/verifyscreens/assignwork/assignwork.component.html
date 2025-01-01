@@ -1,0 +1,80 @@
+<div class="header" fxLayout="row" fxLayoutAlign="start center" style="margin-bottom: 16px;">
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+</div>
+
+
+
+<mat-card>
+  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="5px">
+
+    <div >
+      <mat-card-header >
+        <div  fxLayout="column" >
+          <mat-card-title>{{ eventmaster.title }}</mat-card-title>
+          <div style="display: flex; align-items: center;">
+            <mat-icon aria-label="Venue Icon" style="margin-right: 8px;">location_on</mat-icon>
+            {{ eventmaster.event_venue.name }}
+          </div>
+        </div>
+      </mat-card-header>
+    </div>
+
+
+    <div>
+      <mat-card-content>
+        <div class="date-container" flexgap="5px">
+          <div class="date-day">
+            {{ eventmaster.datetime_from | date: 'd' }}
+          </div>
+          <div class="date-details">
+            <div class="month-year">{{ eventmaster.datetime_from | date: 'MMM' }}</div>
+          </div>
+        </div>
+        <div class="time" style="margin-top: 10px;">{{ eventmaster.datetime_from | date: 'shortTime' }} - {{ eventmaster.datetime_to | date:'shortTime' }}</div>
+      </mat-card-content>
+    </div>
+
+  </div>
+
+  
+</mat-card>
+<div *ngIf="eventMasterProductDetails.length > 0">
+  <h2> {{ eventMasterProductDetails[0]?.event_master?.title }}</h2>
+  <table mat-table [dataSource]="eventMasterProductDetails" class="mat-elevation-z8">
+
+    <!-- Category Name Column -->
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef> Category Name </th>
+      <td mat-cell *matCellDef="let productDetail"> {{ productDetail.category_product?.name }} </td>
+    </ng-container>
+
+    <!-- Count Column -->
+    <ng-container matColumnDef="serviceResponse">
+      <th mat-header-cell *matHeaderCellDef> Response </th>
+      <td mat-cell *matCellDef="let productDetail">
+        <span [ngClass]="{ 'response-no': productDetail.response_detail?.response === 'NO' }">
+          {{ productDetail.response_detail?.response || 'N/A' }}
+        </span>
+        <div class="sub-item" *ngIf="productDetail.response_detail?.response !== 'NO' && productDetail.count != null">
+          <strong>Count: {{ productDetail.count }}</strong>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="remarks">
+      <th mat-header-cell *matHeaderCellDef> Remarks </th>
+      <td mat-cell *matCellDef="let productDetail"> {{ productDetail.remarks || 'N/A'}} </td>
+    </ng-container>
+
+    <!-- Table Header -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <!-- Table Rows -->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+<div *ngIf="eventMasterProductDetails.length === 0">
+  <p>No product details available for this event master.</p>
+</div>

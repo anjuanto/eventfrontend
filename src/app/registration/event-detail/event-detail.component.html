@@ -1,0 +1,93 @@
+<!-- Table to display event data -->
+ <br>
+<div class="event-table">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows>
+    <button mat-icon-button color="primary" (click)="VenueEdit(event.id)" class="button-label"></button>
+
+    <!-- Event ID Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> Event ID </th>
+      <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
+    </ng-container>
+
+    <!-- Date From and To Column -->
+    <ng-container matColumnDef="date_range">
+      <th mat-header-cell *matHeaderCellDef> Date Range </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.datetime_from | date: 'dd/MM/yyyy' }} - {{ element.datetime_to | date: 'dd/MM/yyyy' }}
+      </td>
+    </ng-container>
+    
+
+    <ng-container matColumnDef="Title">
+      <th mat-header-cell *matHeaderCellDef> Title </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.title}}
+      </td>
+    </ng-container>
+
+
+    <!-- <ng-container matColumnDef="time_from">
+      <th mat-header-cell *matHeaderCellDef> Time From </th>
+      <td mat-cell *matCellDef="let element">
+        <ng-container *ngIf="!element.editingTimeFrom; else editTimeFromTemplate">
+          {{ element.editTimeFrom }}
+          <button mat-icon-button color="primary" (click)="editTime(element, 'time_from')" aria-label="Edit time">
+            <mat-icon>edit</mat-icon> 
+          </button>
+        </ng-container>
+        <ng-template #editTimeFromTemplate>
+          <input [(ngModel)]="element.editTimeFrom" placeholder="HH:mm" type="time">
+          <button mat-icon-button (click)="saveTime(element, 'time_from')" aria-label="Save time">
+            <mat-icon style="color: red;">check</mat-icon>
+          </button>
+          <button mat-icon-button (click)="cancelEdit(element, 'time_from')" aria-label="Cancel edit">
+            <mat-icon style="color: blue;">close</mat-icon>
+          </button>
+        </ng-template>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="time_to">
+      <th mat-header-cell *matHeaderCellDef> Time To </th>
+      <td mat-cell *matCellDef="let element">
+        <ng-container *ngIf="!element.editingTimeTo; else editTimeToTemplate">
+          {{ element.editTimeTo }}
+          <button mat-icon-button color="primary" (click)="editTime(element, 'time_to')" aria-label="Edit time">
+            <mat-icon>edit</mat-icon> 
+          </button>
+        </ng-container>
+        <ng-template #editTimeToTemplate>
+          <input [(ngModel)]="element.editTimeTo" placeholder="HH:mm" type="time">
+          <button mat-icon-button (click)="saveTime(element, 'time_to')" aria-label="Save time">
+            <mat-icon style="color: red;">check</mat-icon>
+          </button>
+          <button mat-icon-button (click)="cancelEdit(element, 'time_to')" aria-label="Cancel edit">
+            <mat-icon style="color: blue;">close</mat-icon>
+          </button>
+        </ng-template>
+      </td>
+    </ng-container> -->
+
+       <!-- Venue Edit Button Column -->
+       <ng-container matColumnDef="venue_edit">
+        <th mat-header-cell *matHeaderCellDef> Edit  </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="VenueEdit(element.id)" aria-label="Edit venue">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+    <!-- Row definitions -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div><br>
+
+
+
+
+<!-- Back Button -->
+<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" class="back-button">
+  <button mat-raised-button color="primary" (click)="back()">save</button>
+</div>

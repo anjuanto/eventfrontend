@@ -1,0 +1,162 @@
+
+
+ .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+  /* min-height: 0em; */
+  /* display: flex; */
+  align-items: start; 
+  margin-right: 0px;
+  flex-wrap: wrap;
+} 
+
+.fc .fc-daygrid-day-number {
+  display: flex;
+  justify-content: center; 
+  align-items: center ; 
+  font-size: 24px; 
+  font-weight: bold; 
+}
+.fc-h-event .fc-event-main-frame {
+  display: flex;
+  height: 4px;
+}
+
+.sunday-red {
+  color: red; /* Set the text color to red */
+  font-weight: bold;
+}
+
+.holiday-red {
+  color: red; /* Set the text color to red */
+  font-weight: bold;
+}
+.holiday-name {
+  font-size: 0.7rem;
+  color: rgb(19, 8, 8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%; /* Ensures it doesn't overflow the cell */
+  text-align: center;
+}
+
+/* Style the entire toolbar */
+.fc-toolbar {
+  background-color: #4ca1a4; /* Green background */
+  color: white;             
+  border-radius: 5px;       
+}
+
+/* Style specific parts of the toolbar */
+.fc-toolbar .fc-toolbar-chunk {
+  padding: 5px;
+}
+
+/* Style the buttons in the toolbar */
+.fc-toolbar .fc-button {
+  background-color: #4ca1a4; 
+  color: white;
+  border: none;
+  border-radius: 3px;
+}
+
+/* Add hover effect for buttons */
+.fc-toolbar .fc-button:hover {
+  background-color: #4ca1a4; /* Even darker green */
+}
+.fc .fc-button-primary:disabled {
+  background-color: #014f57;
+  color: white;
+
+
+}
+
+
+.day-number {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.holiday-name {
+  /* position: absolute; */
+  font-size: 0.6rem;
+  color: red;
+  max-width: 100%; /* Ensures the holiday name does not stretch the cell */
+  display: block; /* Keeps holiday name on a new line below the number */
+  text-align: start;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+}
+.day-cell {
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+}
+
+/* .fc-daygrid-day-frame .fc-daygrid-day-events {
+  display: inline-flex;
+  flex-wrap: wrap;                
+  align-items: flex-start;
+  max-height: 100%;               
+  overflow: hidden;               
+  white-space: nowrap;         
+}
+
+
+.fc-daygrid-day-frame .fc-event {
+  flex: 0 1 auto;                 
+  font-size: 0.8em;
+  line-height: 1.2em;
+  padding: 0 3px;
+  margin: 0 2px;
+  white-space: nowrap;            
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+@media (max-width: 768px) {    
+  .fc-daygrid-day-frame .fc-daygrid-day-events {
+    min-height: 3em;
+    display: flex;
+    align-items: start;
+    justify-items: center;
+    margin-right: 0px;
+  }
+
+  .fc-daygrid-day-frame .fc-event {
+    margin: 3px 0;                
+    width: 100%;                 
+    text-align: left;            
+  }
+} */
+
+
+
+/* .fc-daygrid-day-frame .fc-daygrid-day-events {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  overflow-x: auto;              
+  white-space: nowrap;             
+  max-width: 100%;             
+}
+
+.fc-daygrid-day-frame .fc-event {
+  flex: 0 0 auto;                  
+  font-size: 0.8em;               
+  line-height: 1.2em;              
+  padding: 0 3px;                 
+  margin: 0 2px;                   
+  overflow: hidden;               
+  text-overflow: ellipsis;        
+  white-space: nowrap;            
+} */
+
+
+
+  
+ @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+@import url( 'https://fonts.googleapis.com/css?family=Roboto:400,700|Material+Icons');

@@ -1,0 +1,16 @@
+.upload-container {
+    width: 100%;
+  }
+  
+  .event-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers content horizontally */
+    margin-bottom: 20px;
+  }
+  
+  .event-title {
+    text-align: center; /* Center the title text */
+    margin-bottom: 10px;
+  }
+  

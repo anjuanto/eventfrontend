@@ -1,0 +1,93 @@
+<form [formGroup]="formGroup" >
+  <mat-accordion>
+    <!-- Loop through each category in groupedCategoryProducts -->
+    <mat-expansion-panel *ngFor="let category of groupedCategoryProducts | keyvalue">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ eventSupports[category.key] || 'Unknown Category' }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      
+      <!-- Loop through each product in the category -->
+      <div *ngFor="let product of category.value">
+        <p>{{ product.name }}</p>
+        
+        <!-- For YN type: Show Yes/No radio buttons -->
+        <div *ngIf="product.form_field_type === 'radio'">
+          <mat-radio-group (change)="onRadioChange($event, product)">
+            <mat-radio-button *ngFor="let option of product.radio_options" [value]="option" [checked]="option === product.defaultOption">
+              {{ option }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <!-- For YNC type: Show Yes/No radio buttons with count input -->
+        <div *ngIf="product.form_field_type === 'radio_with_count'">
+          <mat-radio-group (change)="onRadioChange($event, product)">
+            <mat-radio-button *ngFor="let option of product.radio_options" [value]="option" [checked]="option === product.defaultOption">
+              {{ option }}
+            </mat-radio-button>
+          </mat-radio-group>
+
+          <!-- Conditionally show count input field -->
+          <div *ngIf="product.showCountInput" class="field-container">
+            <mat-form-field appearance="outline" class="compact-input">
+              <mat-label>Count</mat-label>
+              <input
+                matInput
+                type="number"
+                formControlName="{{ 'count_' + product.id }}"
+                placeholder="Count"
+              />
+            </mat-form-field>
+            <div class="error-container">
+              <mat-error *ngFor="let error of product.validationErrors">
+                {{ error }}
+              </mat-error>
+            </div>
+          </div>
+          
+          
+        </div>
+
+        <!-- For YNCS type: Show Yes/No radio buttons with count and remarks input -->
+        <div *ngIf="product.form_field_type === 'radio_with_count_remarks'">
+          <mat-radio-group (change)="onRadioChange($event, product)">
+            <mat-radio-button *ngFor="let option of product.radio_options" [value]="option" [checked]="option === product.defaultOption">
+              {{ option }}
+            </mat-radio-button>
+          </mat-radio-group>
+
+          <!-- Conditionally show count input field -->
+          <div *ngIf="product.showCountInput">
+            <mat-form-field appearance="outline" class="compact-input">
+              <mat-label>Count</mat-label>
+              <input matInput type="number" formControlName="{{'count_' + product.id}}" placeholder="Count" min="1">
+            </mat-form-field>
+            <mat-error *ngFor="let error of product.validationErrors">
+              {{ error }}
+            </mat-error>
+          </div>
+
+          <!-- Conditionally show remarks input field -->
+          <div *ngIf="product.showSpecialInput">
+            <mat-form-field appearance="outline">
+              <mat-label>Remarks</mat-label>
+              <input matInput type="text" formControlName="{{'remarks_' + product.id}}" placeholder="Enter remarks">
+            </mat-form-field>
+            <mat-error *ngIf="product.validationErrors.includes('Remarks are required.')">
+              Remarks are required.
+            </mat-error>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion><br>
+
+  <!-- <div fxLayout="row" fxLayoutAlign="space-between center" style="margin-top: auto; width: 100%;">
+    <button mat-raised-button color="primary" (click)="next()">Back</button>
+    <button mat-raised-button color="primary">Next</button>
+  </div> -->
+  
+  
+</form>

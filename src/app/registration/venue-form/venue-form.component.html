@@ -1,0 +1,133 @@
+<form [formGroup]="formGroup"><br>
+<!-- Display field either meeting or events selected 1st venue selection -->
+
+<div fxLayout="row"  fxLayout.xs="column" fxLayoutGap="5px">
+
+  <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+        <mat-label>Event Venue</mat-label>
+        <mat-select formControlName="event_venue_id">
+          <mat-option *ngFor="let venue of eventVenues" [value]="venue.id">
+            {{ venue.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formGroup.get('event_venue_id')?.hasError('required')">
+          Venue is <strong>required</strong>
+        </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" fxFlex="50%" fxFlex.xs="50%"   >
+    <mat-label>Date From</mat-label>
+    <input matInput [ngxMatDatetimePicker]="pickerFo" placeholder="DateTime From" formControlName="datetime_from" [min]="minDate" [max]="maxDate"  >
+    <mat-datepicker-toggle matSuffix [for]="$any(pickerFo)"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #pickerFo [showSpinners]="true" [showSeconds]="false"
+      [stepHour]="1" [stepMinute]="30" [stepSecond]="0"
+      [touchUi]="false" [enableMeridian]="false"
+      [disableMinute]="false" [hideTime]="false">
+    </ngx-mat-datetime-picker>
+  </mat-form-field>
+  
+
+  <mat-form-field appearance="outline" fxFlex="50%" fxFlex.xs="50%"  >
+    <mat-label>Date To</mat-label>
+    <input matInput [ngxMatDatetimePicker]="pickerTo" placeholder="DateTime To" formControlName="datetime_to" [min]="minDate" [max]="maxDate">
+    <mat-datepicker-toggle matSuffix [for]="$any(pickerTo)"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #pickerTo [showSpinners]="true" [showSeconds]="false"
+      [stepHour]="1" [stepMinute]="30" [stepSecond]="1"
+      [touchUi]="false" [enableMeridian]="false"
+      [disableMinute]="false" [hideTime]="false">
+    </ngx-mat-datetime-picker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+        <mat-label>Event Type</mat-label>
+        <mat-select formControlName="event_type_id" >
+          <mat-option *ngFor="let type of eventTypes" [value]="type.id">
+            {{ type.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formGroup.get('event_type_id')?.hasError('required')">
+          Event Type is <strong>required</strong>
+        </mat-error>
+  </mat-form-field>
+
+</div>
+
+<!-- Conditionally display the remaining fields if venue is available  and no need of another  venue -->
+
+<div *ngIf=" timecheck && is_available">
+<div fxLayout="row"  fxLayout.xs="column" fxLayoutGap="10px">
+
+  <mat-form-field appearance="outline" fxFlex="50%" class="full-width" *ngIf="!isMeeting">
+        <mat-label>Amala Project Name</mat-label>
+        <mat-select formControlName="amala_project_id">
+          <mat-option *ngFor="let project of amalaProjects" [value]="project.id">
+            {{ project.name }}
+          </mat-option>
+        </mat-select>
+  </mat-form-field>
+      
+  <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title">
+        <mat-error *ngIf="formGroup.get('title')?.hasError('required')">
+          Title is <strong>required</strong>
+        </mat-error>
+  </mat-form-field>
+ 
+  <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Contact No</mat-label>
+      <input
+    matInput
+    formControlName="contact_no"
+    type="text"
+    (keypress)="allowOnlyDigits($event)"
+  
+  />
+   
+      <mat-error *ngIf="formGroup.get('contact_no')?.hasError('pattern')">
+        Contact number must be exactly 10 digits
+      </mat-error>
+  </mat-form-field>
+    
+
+  <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Contact Email</mat-label>
+      <input
+        matInput
+        formControlName="contact_email"
+        type="email"
+      />
+   
+      <mat-error *ngIf="formGroup.get('contact_email')?.hasError('email') && formGroup.get('contact_email')?.dirty">
+        Please enter a valid email address
+      </mat-error>
+  </mat-form-field>
+    
+</div>
+
+</div>
+    
+ <!-- AC / Non-AC Toggle for Venue -->
+
+
+  <!-- Display overlapping events if venue is not available -->
+  <div *ngIf="overlappingEvents.length > 0" class="overlapping-events">
+    <h3>Overlapping Events</h3>
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let event of overlappingEvents">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ event.title }}</mat-panel-title>
+        </mat-expansion-panel-header>
+  
+        <!-- Event Details inside the panel content -->
+        <div class="event-details">
+          <p><strong>Venue Buffer Time:</strong> {{ formatBufferTime(event.event_venue?.buffer_time) }}</p>
+          <p><strong>Start Date:</strong> {{ event.datetime_from }}</p>
+          <p><strong>End Date:</strong> {{ event.datetime_to }}</p>
+          <!-- Add more event details as needed -->
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  
+</form>

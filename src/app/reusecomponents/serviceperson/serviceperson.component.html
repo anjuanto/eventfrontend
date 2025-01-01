@@ -1,0 +1,30 @@
+<br>
+<button mat-icon-button color="primary" (click)="goback()">
+  <mat-icon>arrow_back</mat-icon>
+</button>
+
+<div *ngIf="!loading && departmentDetails">
+  <div *ngFor="let departmentKey of departmentDetails | keyvalue" >
+    <mat-card class="department-card" >
+      <mat-card-header>
+        <mat-card-title>{{ departmentKey.key }}</mat-card-title> <!-- Department name -->
+      </mat-card-header>
+      <mat-card-content>
+        <!-- Display Assigned Users only once -->
+        <ng-container *ngIf="departmentKey.value[0]?.assignedUsers && departmentKey.value[0]?.assignedUsers.length > 0; else noUsers">
+          <p>Assigned Users:</p>
+          
+            <div class="user-details" *ngFor="let user of departmentKey.value[0]?.assignedUsers" fxLayout="row" fxLayoutGap="10px">
+              <div><strong>Name:</strong> {{ user.name }}</div>
+              <div><strong>Mobile:</strong> {{ user.mobile_no }}</div>
+            
+          </div>
+        </ng-container>
+        <!-- Fallback if no users are assigned -->
+        <ng-template #noUsers>
+          <p>No assigned users for this department.</p>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+
+<br>
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+  <!-- Back Arrow Button (aligned to the start) -->
+  <button mat-icon-button color="primary" (click)="goback()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+</div>
+
+
+<div fxLayout="row" fxLayoutWrap>
+  <mat-chip-listbox aria-label="Select an option">
+    <mat-chip-option
+      *ngFor="let option of options"
+      [selected]="selectedOption === option"
+      (click)="selectOption(option)"
+      [color]="selectedOption === option ? 'primary' : 'none'">
+      {{ option }}
+    </mat-chip-option>
+  </mat-chip-listbox>
+</div>
+
+<div *ngIf="selectedOption === 'softcopy'">
+  <div *ngFor="let event of events">
+    <div *ngIf="event.softcopyDetails && event.softcopyDetails.length > 0" class="softcopy-details" fxLayout="column" fxLayoutWrap fxLayoutGap="10px">
+
+      <!-- Display all softcopies -->
+      <div *ngFor="let softcopy of event.softcopyDetails" class="softcopy-box" fxFlex="auto" fxLayout="row" fxLayoutAlign="start center">
+        <ng-container *ngIf="isImage(softcopy.original_filename); else pdfTemplate">
+          <img [src]="getFileUrl(softcopy)" alt="Softcopy Image" class="thumbnail" />
+        </ng-container>
+        <ng-template #pdfTemplate>
+          <mat-icon>picture_as_pdf</mat-icon>
+        </ng-template>
+        <a [href]="getFileUrl(softcopy)" target="_blank" class="file-name">{{ softcopy.original_filename }}</a>
+        <button mat-icon-button color="warn" (click)="deleteSoftcopy(event, softcopy)" matTooltip="Delete File">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </div>
+
+  
+
+    </div>
+  </div>
+</div>
+ <!-- Display Report -->
+
+<div *ngIf="selectedOption === 'report'">
+    <div *ngFor="let event of events" class="event-report">
+      <div #contentToConvert>
+      <h3>{{ event.title }}</h3>
+      <p><strong>Event Type:</strong> {{ event.event_type.name }}</p>
+      <p><strong>Department:</strong> {{ event.department.departmentName }}</p>
+      <p><strong> Time:</strong> {{ event.datetime_from | date:'dd MMMM yyyy, h:mm a' }} - {{ event.datetime_to | date:'dd MMMM yyyy, h:mm a' }}</p>
+      <p><strong> Contact Email:</strong> {{ event.contact_email }}</p>
+      <p><strong> Contact Number:</strong> {{ event.contact_no }}</p>
+      <p><strong> Event Venue:</strong>
+        {{ event.event_venue?.name || 'N/A' }}
+        (Capacity: {{ event.event_venue?.capacity || 'N/A' }}, Building: {{ event.event_venue?.building_name || 'N/A' }})
+      </p>
+      <p><strong> Amala Project:</strong> {{ event.project?.name }}</p>
+      <p><strong>Event Report: </strong> {{event.event_report}}
+      </p>
+    </div>
+    </div>
+    <button mat-raised-button color="primary" (click)=" generatePDF()">Convert to PDF</button>
+  </div>

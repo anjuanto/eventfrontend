@@ -1,0 +1,30 @@
+
+
+.count-input {
+    width: 100px;
+    margin-right:5px;  /* Adjust width as needed */
+  }
+  
+  .count-input input {
+    height: 24px; /* Adjust height as needed */
+    font-size: 14px;
+    margin-right:5px; /* Adjust font size to fit the height */
+  }
+  .compact-input {
+    width: 70px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .field-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  
+  .error-container {
+    margin-left: 16px; /* Spacing between input and error messages */
+    color: red;
+    font-size: 12px; /* Adjust font size if needed */
+  }
+  

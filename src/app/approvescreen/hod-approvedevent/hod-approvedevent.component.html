@@ -1,0 +1,201 @@
+<br>
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+  <!-- Back Arrow Button (aligned to the start) -->
+  <button mat-icon-button color="primary" (click)="goback()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <!-- Spacer to push the search bar to the center -->
+  <div fxFlex="auto"></div>
+
+<!-- Search Bar (Oval Shaped) -->
+<div class="search-bar-container">
+  <mat-form-field appearance="outline" class="search">
+    <mat-label>Search Events</mat-label>
+    <mat-icon matPrefix>search</mat-icon> 
+    <input matInput [(ngModel)]="searchTerm" (ngModelChange)="onSearch()" placeholder="Search by title or description">
+    <button *ngIf="searchTerm" mat-icon-button matSuffix (click)="clearSearch()">
+      <mat-icon>clear</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+
+  <!-- Spacer to maintain center alignment -->
+  <div fxFlex="auto"></div>
+</div>
+
+
+
+    <mat-chip-listbox
+      aria-label="Event Status Filter"
+      [(ngModel)]="currentStatus"
+      (ngModelChange)="fetchByStatus($event)"
+      multiple="false">
+  
+      <div class="chip-container">
+      
+        <mat-chip-option [value]="'all'">
+          <span class="badge">{{ groupedEvents?.['all'] || 0 }}</span>
+          All
+        </mat-chip-option>
+      </div>
+  
+      <div class="chip-container">
+        <mat-chip-option [value]="'pending'">
+          <span class="badge">{{ groupedEvents?.['pending'] || 0 }}</span>
+          Pending
+        </mat-chip-option>
+      </div>
+  
+      <div class="chip-container">
+        <mat-chip-option [value]="'rejected'">
+          <span class="badge">{{ groupedEvents?.['rejected'] || 0 }}</span>
+          Rejected
+        </mat-chip-option>
+      </div>
+
+      <div class="chip-container">
+        <mat-chip-option [value]="'approved'">
+          <span class="badge">{{ groupedEvents?.['approved'] || 0 }}</span>
+          Approved
+        </mat-chip-option>
+      </div>
+  
+      <div class="chip-container">
+        <mat-chip-option [value]="'Completed'">
+          <span class="badge">{{ groupedEvents?.['completed'] || 0 }}</span>
+          Completed
+        </mat-chip-option>
+      </div>
+  
+    </mat-chip-listbox>
+
+
+<br>
+
+<!-- Date Range Picker -->
+<div *ngIf="currentStatus === 'Completed'"  fxLayout="row" fxLayoutGap="20px" style="margin-top: 16px;">
+
+  <mat-form-field appearance="fill">
+    <mat-label>Start Date</mat-label>
+    <input matInput [matDatepicker]="startPicker" [(ngModel)]="customStartDate">
+    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+    <mat-datepicker #startPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>End Date</mat-label>
+    <input matInput [matDatepicker]="endPicker" [(ngModel)]="customEndDate">
+    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+    <mat-datepicker #endPicker></mat-datepicker>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="fetchDateRange('Completed')">Ok</button>
+</div><br>
+
+
+<!-- Display message if no events are found -->
+<div *ngIf="filteredEvents.length === 0" >
+  <p>No events.</p>
+</div>
+
+<!-- Events List -->
+<div fxLayout="row wrap" fxLayoutGap="16px" fxLayoutAlign="start stretch" fxLayout.xs="column">
+  <div *ngFor="let event of updatePaginatedEvents()"  fxFlex="100%" fxFlex.sm="48%" fxFlex.md="31%" fxFlex.lg="30%" fxFlex.xl="23%">
+ 
+    <mat-card class="mat-elevation-z8 event-card" (click)="showevent(event.id)">
+      <mat-card-content>
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="25px">
+          <app-project-avatar [projectName]="event.project?.name"></app-project-avatar>
+              <div>
+                <mat-card-title class="title">
+                  {{ event.title | uppercase }}
+                </mat-card-title>   
+              <mat-card-subtitle 
+                [ngStyle]="{
+                  'color': (event.status?.status === 'HOD-Rejected' || event.status?.status === 'Priest-Incharge-Rejected') ? 'red' :
+                            (event.status?.status === 'HOD-Approved' || event.status?.status === 'Priest-Incharge-Approved') ? 'green' :
+                            (event.status?.status === 'Scheduled') ? 'blue' : 'none'
+                }"
+                style="font-size: 12px;">
+                {{ event.status?.status || 'N/A' }}
+  
+             </mat-card-subtitle>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+                <div class="event-date-time" fxFlex="none">
+                  <div class="event-month">{{ event.datetime_from | date: 'MMMM' }}</div>
+                  <div class="event-date">{{ event.datetime_from | date: 'd' }}</div>
+                  <div class="event-time">{{ event.datetime_from | date: 'hh:mm a' }}</div>
+                </div>
+              </div>
+
+      
+
+          <div fxLayout="row" fxLayoutGap="10px">
+          <button mat-icon-button color="primary"
+          *ngIf="event.status?.status === 'Priest-Incharge-Rejected'"
+          (click)="VenueEdit(event.id)" class="button-label">
+          <mat-icon>edit</mat-icon>
+          edit
+          </button>
+          </div>
+          </div><br>
+
+          <!-- Additional Actions (revert, resubmit buttons) -->
+          <div fxLayout="row" fxLayoutGap="10px"  *ngIf="event.status?.status === 'Priest-Incharge-Rejected'">
+            <button mat-raised-button color="primary" matTooltip="Reject Event" 
+              (click)="rejectEvent(event); $event.stopPropagation()" class="rejected">
+              Reject
+            </button>
+          <button mat-raised-button color="primary" matTooltip="Approve Event" (click)="approveEvent(event); $event.stopPropagation()" class="approve">
+              <mat-icon>check</mat-icon>
+             Re-Submit
+            </button>
+          </div>
+
+          <!-- Approval Buttons at the Bottom -->
+          <div fxLayout="row"  fxLayoutGap="10px" class="approval-buttons" *ngIf="event.status?.status === 'Scheduled'">
+          <button mat-raised-button color="primary" matTooltip="Approve Event" (click)="approveEvent(event);$event.stopPropagation()" class="approve">
+            <span>Approve</span>
+          </button>
+          <button mat-raised-button color="warn" matTooltip="Reject Event" (click)="rejectEvent (event);$event.stopPropagation()" class="rejected">
+            <span>Reject</span>
+          </button>
+          </div><br>
+
+            <!-- Venue Details in Footer -->
+            <mat-card-footer class="venue-footer">
+              <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+                <div fxFlex="auto">
+                  <mat-icon color="primary">location_on</mat-icon>
+                  <span>
+                    <strong>Venue:</strong> {{ event.event_venue?.name || 'No venue specified' }}
+                  </span>
+                </div>
+              </div>
+            </mat-card-footer>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+
+
+<mat-paginator
+[length]="filteredEvents.length"
+[pageSize]="pageSize"
+[pageSizeOptions]="[3, 10, 20]"
+(page)="onPageChange($event)"
+showFirstLastButtons 
+style="display: flex; justify-content: center; margin-top: 20px;">
+</mat-paginator>
+
+
+
+
+
+
+
+

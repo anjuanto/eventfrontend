@@ -1,0 +1,109 @@
+<div *ngIf="!selectedType" fxLayout="row" fxLayoutAlign="space-between center" class="header">
+  <button mat-icon-button class="back-button" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+</div>
+
+
+<mat-card class="create-event no-border">
+
+<div fxLayout="row" fxLayoutAlign="center center" class="header">
+      <mat-icon class="header-icon">forum</mat-icon>
+      <h1 class="header-title">Create New Event</h1>
+</div>
+
+<div *ngIf="!selectedType" fxLayoutAlign="space-evenly center" fxLayout.xs="column" fxLayoutGap="50px" class="container">
+    <button mat-button color="primary" (click)="selectType('meeting')"class="large-button-parent-form">
+      <mat-icon class="large-icon-pf">diversity_3</mat-icon>
+      Meeting
+    </button>
+   <button mat-button color="primary" (click)="selectType('event')"  class="large-button-parent-form">
+      <mat-icon class="large-icon-pf">edit_calendar</mat-icon>
+      Event
+    </button>
+</div>
+  
+<mat-horizontal-stepper *ngIf="selectedType" #stepper [linear]="true">
+  <!-- Venue Step -->
+  <!-- [completed]="isFormValid" -->
+<mat-step [completed]="isFormValid">
+    <ng-template matStepLabel>Venue</ng-template>
+    <app-venue-form *ngIf="isTypeSelected" 
+                    [formGroup]="eventForm" 
+                    [eventVenues]="eventVenues" 
+                    [eventTypes]="eventTypes" 
+                    [stepper]="stepper" 
+                    (formValidityChange)="onFormValidityChange($event)">
+    </app-venue-form>
+    
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+      <button *ngIf="selectedType === 'event'" 
+              mat-raised-button 
+              color="primary" 
+              [disabled]="!isFormValid"
+              (click)="next()">Next</button>
+
+      <button *ngIf="selectedType === 'meeting'" 
+              mat-raised-button 
+              color="primary" 
+              (click)="submitForm()">Register</button>
+
+      <button *ngIf="selectedType === 'meeting'" 
+              mat-raised-button 
+              color="primary" 
+              (click)="goBack()">Back</button>
+    </div>
+</mat-step>
+<!-- Service Step -->
+<mat-step *ngIf="selectedType !== 'meeting'" 
+[completed]="!isAnyCountInvalid">
+  <ng-template matStepLabel>Service</ng-template>
+  <app-service-form 
+    [formGroup]="eventForm" 
+    [stepper]="stepper" 
+    (serviceCategoryData)="onServiceCategoryDataReceived($event)">
+  </app-service-form>
+  <div fxLayout="row" fxLayoutAlign="space-between center" style="margin-top: auto; width: 100%;">
+    <button mat-raised-button color="primary" (click)="previous()">Back</button>
+    <button mat-raised-button color="primary" 
+            [disabled]="isAnyCountInvalid" 
+            (click)="nexton()">Next</button>
+  </div>
+</mat-step>
+<!-- Budget Step -->
+<mat-step *ngIf="selectedType !== 'meeting'" [disabled]="isAnyCountInvalid">
+  <ng-template matStepLabel>Budget</ng-template>
+  <app-budget-form *ngIf="!secondVenueNeeded && !showPopup && !details" 
+                   [formGroup]="eventForm" 
+                   [stepper]="stepper" 
+                   (budgetData)="onBudgetDataReceived($event)">
+  </app-budget-form>
+
+  <div *ngIf="!secondVenueNeeded && !showPopup && !details" 
+       fxLayout="row" 
+       fxLayoutAlign="space-between center" 
+       style="margin-top: auto; width: 100%;">
+    <button mat-raised-button color="primary" (click)="previous()">Back</button>
+    <button mat-raised-button color="primary" [disabled]="isAnyCountInvalid" (click)="submitForm()">Save</button>
+  </div>
+
+  <!-- Popup for Second Venue -->
+  <div *ngIf="showPopup">
+    <div class="popup-container">
+      <div class="popup-content">
+        <h2>Event data created successfully....Need another venue?</h2>
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+          <button mat-raised-button color="primary" (click)="onPopupClose(true)">Yes</button>
+          <button mat-raised-button color="warn" (click)="onPopupClose(false)">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-step>
+</mat-horizontal-stepper>
+
+
+
+  <router-outlet></router-outlet>
+</mat-card>
+

@@ -1,0 +1,103 @@
+<div class="calendar-container">
+  <full-calendar [options]="calendarOptions"></full-calendar>
+  <br>
+  
+
+  <!-- Dropdown menu for selecting a group -->
+  <div class="dropdown-menu" *ngIf="dropdownVisible">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearch()"
+      placeholder="Search events..."
+      class="search-input"
+    />
+    <ul class="scrollable-list">
+      <li *ngFor="let group of groupKeys" (click)="filterEventsByGroup(group)">
+        <span [style.background-color]="groupColors[group]" class="color-indicator"></span>
+        {{ group }}
+      </li>
+    </ul>
+  </div>
+<div>
+
+
+
+  
+  <!-- Display either filteredEvents or eventsForSelectedDate -->
+  <ng-container *ngIf="filteredEvents.length > 0; else showSelectedEvents">
+    <div *ngFor="let event of filteredEvents">
+      <mat-card appearance="outlined" (click)="showDetails(event.id)">
+        <div fxLayout="row" fxLayoutAlign="start center" class="avatar-section" fxLayoutGap="16px">
+        <!-- Avatar Image -->
+    
+          <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
+            <mat-card-title>{{ event.title || 'No Title' }}</mat-card-title>
+          </div>
+        </div>
+        <mat-card-content>
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="25px">
+            <div fxLayout="column">
+              <span>{{ event.datetime_from | date:'d MMM y, h:mm a' }}</span>
+              <span class="event-venue">
+                <mat-icon style="font-size: 20px;">place</mat-icon>
+                {{ event.event_venue?.name || 'N/A' }}
+              </span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
+
+  <!-- Fallback to eventsForSelectedDate if no filtered events -->
+  <ng-template #showSelectedEvents>
+    <div *ngFor="let event of eventsForSelectedDate">
+      <!-- <mat-card appearance="outlined" (click)="showDetails(event.id)">
+        <div fxLayout="row" fxLayoutAlign="start center" class="avatar-section" fxLayoutGap="16px">
+          <app-project-avatar [projectName]="event.project?.name"></app-project-avatar>
+          <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
+            <mat-card-title class="mat-card-title">{{ event.title || 'No Title' }}</mat-card-title>
+          </div>
+        </div>
+        <mat-card-content>
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="25px">
+            <div fxLayout="column">
+              <span>{{ event.datetime_from | date:'d MMM y, h:mm a' }}</span>
+              <span class="event-venue">
+                <mat-icon style="font-size: 20px;">place</mat-icon>
+                {{ event.event_venue?.name || 'N/A' }}
+              </span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card> -->
+      <mat-card class="event-card" appearance="outlined" (click)="showDetails(event.id)">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="event-header">
+          <app-project-avatar [projectName]="event.project?.name" class="avatar-shadow"></app-project-avatar>
+          <div fxLayout="column" class="event-info">
+            <mat-card-title class="mat-card-title">{{ event.title || 'No Title' }}</mat-card-title>
+            <span class="event-venue">
+              <mat-icon style="font-size: 20px;">place</mat-icon>
+              {{ event.event_venue?.name || 'N/A' }}
+            </span>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="center center" class="date-box">
+            <span class="date-day">{{ event.datetime_from | date:'MMM' | uppercase }}</span>
+            <span class="date-date">{{ event.datetime_from | date:'d' }}</span><br>
+            <span class="date-time">{{ event.datetime_from | date:'h:mm a' }}</span>
+          </div>
+        </div>
+      </mat-card>
+      
+      
+ 
+    </div>
+    <div *ngIf="eventsForSelectedDate.length === 0">
+      <p>No events found for this date.</p>
+    </div>
+  </ng-template>
+</div>
+
+</div>
+  

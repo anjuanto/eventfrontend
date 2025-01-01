@@ -1,0 +1,82 @@
+ 
+  mat-icon {
+    font-size: 20px;
+    margin-right: 5px;
+    color: #3f51b5; /* Change this color as needed */
+  }
+  mat-card-content {
+
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  
+  
+  .circle-icon {
+    width: 25px;
+    height: 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3f51b5; /* Circle background color */
+    color: white; /* Text color */
+    border-radius: 50%;
+    font-size: 14px;
+    margin-right: 8px;
+  }
+  
+
+  .button-container {
+    border: 1px solid #ccc;  /* Light gray border for the rectangle */
+    padding: 10px;  /* Space around the buttons */
+    border-radius: 8px; 
+    display: flex;  /* Flexbox for inline alignment */
+    justify-content: space-between;  /* Space between the buttons */
+    align-items: center;  /* Center align buttons vertically */
+    background-color: #f9f9f9;  /* Light background color */
+    max-width: 500px;  /* Max width of the rectangle */
+    margin: 0 auto;  /* Center align the rectangle horizontally */
+  }
+  
+  .button-container button {
+    margin: 0 5px;  /* Add some spacing between buttons */
+  }
+  .button-label{
+    font-size: 12px;
+  }
+ 
+  
+  .icon-label {
+    font-size: 12px; /* Adjust label font size */
+   
+  }
+  .scrollable-container {
+    max-height: 150px; /* Height to control vertical display */
+    width: 75%;        /* Width to control horizontal scroll area */
+    overflow-x: auto;  /* Horizontal scroll only */
+    overflow-y: hidden;
+
+    padding: 10px;
+    white-space: nowrap; /* Ensures items stay in a row for horizontal scrolling */
+  }
+  .divider {
+    border-top: 1px solid #080808;
+    margin: 15px 0; /* Space above and below the divider */
+  }
+  
+
+  .thumbnail {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 5px;
+  }
+  
+  .file-name {
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+    word-wrap: break-word;
+    max-width: 100px;
+  }
+
+  
+  

@@ -1,0 +1,52 @@
+.half-circle-container {
+    position: relative; /* Ensures it aligns with mat-card */
+    display: flex;
+    align-items: center; /* Center content vertically */
+    justify-content: flex-end; /* Align the half-circle to the right */
+    height: 100%; /* Matches the card header's height */
+    top: 1px; /* Adjust top distance from the edge */
+    right: 0px;
+  }
+  
+  .half-circle {
+    position: relative; /* Contains the text inside */
+    width: 70px;
+    height: 60px;
+    background-color: #ccdbf5;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    display: flex; /* Flexbox for centering content */
+    flex-direction: column; /* Align items vertically */
+    justify-content: center; /* Center text vertically */
+    align-items: center; /* Center text horizontally */
+  }
+  
+  .half-circle .time {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0; /* Remove unwanted spacing */
+  }
+  
+  .half-circle .day {
+    font-size: 10px;
+    margin: 0; /* Remove unwanted spacing */
+  }
+
+  .mat-card-title {
+    font-weight: bold;
+    color: #070808 !important;
+    white-space: nowrap;        
+    text-overflow: ellipsis;
+    display: block; /* Ensure it's a block element */
+    max-width: 150px;  /* Set the max width */
+    overflow: hidden;  /* Hide the overflowing content */
+  }
+
+  .header {
+    display: flex;
+    padding: 6px 6px !important;
+}
+.datebutton{
+  border-radius: 20px; 
+}

@@ -1,0 +1,228 @@
+<br>
+<button mat-raised-button color="primary" (click)="toggleFilters()">Filters</button><br><br>
+
+  <!-- Column with only titles -->
+  <div class="container" fxLayout="row" fxLayoutGap="20px"  *ngIf="showFilters" >
+  
+    <!-- Single Mat Card for Titles -->
+    <mat-card>
+      <div fxLayout="column" fxLayoutAlign="start start">
+        <div class="title-container" 
+          [ngClass]="{'active': selectedFilter === 'eventType'}"  
+          (click)="selectedFilter = selectedFilter === 'eventType' ? null : 'eventType'">
+          Event Type
+        </div>
+        
+        <div class="title-container" 
+          [ngClass]="{'active': selectedFilter === 'venue'}" 
+          (click)="selectedFilter = selectedFilter === 'venue' ? null : 'venue'">
+          Venue
+        </div>
+        
+        <div class="title-container" 
+          [ngClass]="{'active': selectedFilter === 'amalaProject'}" 
+          (click)="selectedFilter = selectedFilter === 'amalaProject' ? null : 'amalaProject'">
+          Amala Project
+        </div>
+        
+        <div class="title-container" 
+          [ngClass]="{'active': selectedFilter === 'date'}" 
+          (click)="selectedFilter = selectedFilter === 'date' ? null : 'date'">
+          Date
+        </div>
+
+        <div class="title-container"
+        [ngClass]="{'active': selectedFilter === 'status'}"
+        (click)="selectedFilter = selectedFilter === 'status' ? null : 'status'">
+        Status
+      </div>
+      </div>
+    </mat-card>
+    
+  
+
+  <!-- Column for displaying content based on selected title -->
+  <div fxLayout="column">
+    <ng-container *ngIf="selectedFilter === 'eventType'">
+      <div class="filter-card-content" fxLayout="row" fxLayoutAlign="start center">
+        <mat-chip-list>
+          <mat-chip *ngFor="let eventType of eventTypes" [selectable]="true" [removable]="true"
+                    (click)="toggleEventTypeSelection(eventType.id)"
+                    (removed)="removeEventType(eventType.id)"
+                    [ngClass]="{'selected-chip': isEventTypeSelected(eventType.id)}"
+                    class="chip-item">
+            {{ eventType.name }}
+            <mat-icon matChipRemove *ngIf="isEventTypeSelected(eventType.id)">cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+      </div>
+    </ng-container>
+
+
+<!-- Venue Content -->
+<ng-container *ngIf="selectedFilter === 'venue'">
+  <div class="filter-card-content" fxLayout="row" fxLayoutAlign="start center">
+    <mat-chip-list>
+      <mat-chip *ngFor="let venue of venues" [selectable]="true" [removable]="true"
+                (click)="toggleVenueAndFilterEvents(venue.id)"
+                [ngClass]="{'selected-chip': isVenueSelected(venue.id)}"
+                class="chip-item">
+        {{ venue.name }}
+        <mat-icon *ngIf="isVenueSelected(venue.id)" matChipRemove (click)="removeVenue(venue.id)">cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+  </div>
+</ng-container>
+
+    <!-- Amala Project Content -->
+    <ng-container *ngIf="selectedFilter === 'amalaProject'">
+      <div class="filter-card-content" fxLayout="row" fxLayoutAlign="start center">
+        <mat-chip-list>
+          <mat-chip 
+            *ngFor="let project of amalaProjects" 
+            [selectable]="true"
+            [removable]="true"
+            (click)="toggleAmalaProjectSelection(project.id)" 
+            [ngClass]="{'selected-chip': isAmalaProjectSelected(project.id)}"
+            class="chip-item"> 
+            {{ project.name }}
+            <mat-icon  *ngIf="isAmalaProjectSelected(project.id)" matChipRemove  (click)="removeAmalaProject(project.id)">
+              cancel
+            </mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+      </div>
+    </ng-container>
+
+    <!-- Display Date Picker when "Date" filter is selected -->
+    <ng-container *ngIf="selectedFilter === 'date'">
+      <div class="filter-card-content" fxLayout="row" fxLayoutAlign="start center">
+        <mat-form-field appearance="fill">
+          <mat-label>Select Date Range</mat-label>
+          <mat-date-range-input [rangePicker]="picker" [min]="minDate">
+            <input
+              matStartDate
+              placeholder="Start date"
+              [(ngModel)]="selectedStartDate"
+              (dateChange)="selectedEndDate ? filterEventsByDateRange() : null"
+            >
+            <input
+              matEndDate
+              placeholder="End date"
+              [(ngModel)]="selectedEndDate"
+              (dateChange)="selectedStartDate ? filterEventsByDateRange() : null"
+            >
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="selectedFilter === 'status'">
+      <div class="filter-card-content" fxLayout="row" fxLayoutAlign="start center">
+        <mat-chip-list aria-label="Status selection">
+          <mat-chip
+            *ngFor="let status of statusOptions"
+            [selected]="selectedStatus === status"
+            (click)="selectStatus(status)"
+            selectable
+            [color]="selectedStatus === status ? 'primary' : ''"
+            class="chip-item">
+            {{ status }}
+            <mat-icon
+              *ngIf="selectedStatus === status"
+              matChipRemove
+              (click)="removeStatusSelection($event)">
+              cancel
+            </mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+      </div>
+    </ng-container>
+    
+    
+    
+
+    
+    
+    
+  </div>
+</div><br>
+
+<!-- <div class="filter-container">
+  <button mat-raised-button color="primary" [matMenuTriggerFor]="filterMenu">Filter Events</button>
+  <mat-menu #filterMenu="matMenu">
+    
+ 
+    <button mat-menu-item [matMenuTriggerFor]="eventTypeMenu">Event Type</button>
+    <mat-menu #eventTypeMenu="matMenu">
+      <button mat-menu-item *ngFor="let eventType of eventTypes" (click)="filterEventsByType(eventType.id)">
+        {{ eventType.name }}
+      </button>
+    </mat-menu>
+    
+
+    <button mat-menu-item [matMenuTriggerFor]="venueMenu">Venue</button>
+    <mat-menu #venueMenu="matMenu">
+      <button mat-menu-item *ngFor="let venue of venues" (click)="filterEventsByVenue(venue.id)">
+        {{ venue.name }}
+      </button>
+    </mat-menu>
+
+    <button mat-menu-item [matMenuTriggerFor]="amalaProjectMenu">Amala Project</button>
+    <mat-menu #amalaProjectMenu="matMenu">
+      <button mat-menu-item *ngFor="let project of amalaProjects" (click)="filterAmalaProjects(project.id)">
+        {{ project.name }}
+      </button>
+    </mat-menu>
+    <button mat-menu-item (click)="loadEvents()">All Events</button>
+  </mat-menu>
+</div>
+<br> -->
+
+
+
+  <ng-container *ngIf="filteredEvents !== null && filteredEvents.length > 0;">
+    <div *ngFor="let event of filteredEvents">
+      <mat-card class="mat-elevation-z8 event-card">
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="25px">
+          <app-project-avatar [projectName]="event.project?.name"></app-project-avatar>
+          <div (click)="showevent(event.id)">
+            <strong class="title">{{ event.title }}</strong>
+            <mat-card-subtitle 
+              style="font-size: 12px;">
+              {{ event.status?.status || 'N/A' }}
+            </mat-card-subtitle>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </ng-container>
+
+ 
+  <!-- <ng-container *ngIf="filteredEvents.length === 0">
+    <p style="color: red;">No events found for the selected filter.</p>
+  </ng-container>
+   -->
+
+ 
+  <ng-template *ngIf=" filteredEvents.length === 0">
+      <div *ngFor="let event of events">
+        <mat-card class="mat-elevation-z8 event-card">
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="25px">
+            <div *ngIf="event.event_type?.name" class="event-icon-circle">
+              {{ getFirstThreeLetters(event.event_type?.name) }}
+            </div>
+            <div (click)="showevent(event.id)">
+              <strong class="title">{{ event.title }}</strong>
+              <mat-card-subtitle
+                style="font-size: 12px;">
+                {{ event.status?.status || 'N/A' }}
+              </mat-card-subtitle>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+  </ng-template>
+ 
+  

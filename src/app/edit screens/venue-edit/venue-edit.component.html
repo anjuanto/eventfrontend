@@ -1,0 +1,128 @@
+<div class="venue-edit-container">
+  <!-- Back Button -->
+  <button mat-icon-button color="primary" (click)="goback()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <!-- Form Start -->
+  <form [formGroup]="eventForm">
+    <!-- Venue and Project Selection -->
+    <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayout.xs="column" fxLayoutGap="5px">
+
+      <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+        <mat-label>Event Venue</mat-label>
+        <mat-select formControlName="event_venue_id">
+          <mat-option *ngFor="let venue of eventVenues" [value]="venue.id">
+            {{ venue.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="eventForm.get('event_venue_id')?.hasError('required')">
+          Venue is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex="50%" class="full-width" >
+        <mat-label>DateTime From</mat-label>
+        <input matInput [ngxMatDatetimePicker]="pickerFo" placeholder="DateTime From" formControlName="datetime_from" [min]="minDate" [max]="maxDate">
+        <mat-datepicker-toggle matSuffix [for]="pickerFo"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #pickerFo [showSpinners]="true" [stepHour]="1" [stepMinute]="30"></ngx-mat-datetime-picker>
+        <mat-error *ngIf="eventForm.get('datetime_from')?.hasError('required')">
+          DateTime From is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex="50%" class="full-width" >
+        <mat-label>DateTime To</mat-label>
+        <input matInput [ngxMatDatetimePicker]="pickerTo" placeholder="DateTime To" formControlName="datetime_to" [min]="minDate" [max]="maxDate">
+        <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #pickerTo [showSpinners]="true" [stepHour]="1" [stepMinute]="30"></ngx-mat-datetime-picker>
+        <mat-error *ngIf="eventForm.get('datetime_to')?.hasError('required')">
+          DateTime To is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex="50%" class="full-width" >
+        <mat-label>Event Type</mat-label>
+        <mat-select formControlName="event_type_id">
+          <mat-option *ngFor="let type of eventTypes" [value]="type.id">
+            {{ type.name }}
+          </mat-option>          
+        </mat-select>
+        <mat-error *ngIf="eventForm.get('event_type_id')?.hasError('required')">
+          Event Type is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+    </div>
+
+    <!-- Contact Information -->
+    <div   fxLayout="row" fxLayoutAlign="space-between center" fxLayout.xs="column" fxLayoutGap="10px">
+
+      <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+        <mat-label>Amala Project</mat-label>
+        <mat-select formControlName="amala_project_id">
+          <mat-option *ngFor="let project of amalaProjects" [value]="project.id">
+            {{ project.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex="50%" class="full-width" >
+        <mat-label>Contact No</mat-label>
+        <input matInput formControlName="contact_no">
+        <mat-error *ngIf="eventForm.get('contact_no')?.hasError('required') && eventForm.get('contact_no')?.touched">
+          Contact Number is required.
+        </mat-error>
+        <mat-error *ngIf="eventForm.get('contact_no')?.hasError('pattern') && eventForm.get('contact_no')?.touched">
+          Contact Number must be a valid 10-digit number.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex="50%" class="full-width">
+        <mat-label>Contact Email</mat-label>
+        <input matInput formControlName="contact_email">
+        <mat-error *ngIf="eventForm.get('contact_email')?.hasError('required') && eventForm.get('contact_email')?.touched">
+          Email is required.
+        </mat-error>
+        <mat-error *ngIf="eventForm.get('contact_email')?.hasError('email') && eventForm.get('contact_email')?.touched">
+          Please enter a valid email address.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex="50%"  class="full-width">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title">
+        <mat-error *ngIf="eventForm.get('title')?.hasError('required')">
+          Title is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+    </div>
+
+    <!-- Submit Button -->
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayout.xs="column" fxLayoutGap="10px">
+      <button mat-raised-button color="primary" type="submit"  *ngIf="!isMeetingType" (click)="onNextClick()">Next</button>
+      <button mat-raised-button color="primary" type="submit"  *ngIf="isMeetingType" (click)="onNextClick()">save</button>
+    </div>
+  </form>
+
+  <!-- Overlapping Events Section -->
+  <div *ngIf="overlappingEvents.length > 0" class="overlapping-events">
+    <h3>Overlapping Events</h3>
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let event of overlappingEvents">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ event.title }}</mat-panel-title>
+        </mat-expansion-panel-header>
+  
+        <!-- Event Details inside the panel content -->
+        <div class="event-details">
+          <p><strong>Venue Buffer Time:</strong> {{ formatBufferTime(event.event_venue?.buffer_time) }}</p>
+          <p><strong>Start Date:</strong> {{ event.datetime_from }}</p>
+          <p><strong>End Date:</strong> {{ event.datetime_to }}</p>
+          <!-- Add more event details as needed -->
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

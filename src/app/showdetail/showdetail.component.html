@@ -1,0 +1,196 @@
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+  <button mat-icon-button color="primary" (click)="goback()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+</div>
+
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>
+
+<div *ngFor="let event of events">
+  <mat-card>
+    <mat-card-title fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
+      <!-- Event Title -->
+      <div style="text-transform: capitalize;">
+        {{ event.title }}
+      </div>      
+      <!-- Privacy Button -->
+      <div>
+        <button mat-icon-button (click)="togglePrivacy()">
+          <mat-icon>{{ isPublic ? 'public' : 'lock' }}</mat-icon>
+        </button>
+      </div>
+    </mat-card-title><br>
+    
+
+    <mat-card-content>
+      <p style="display: flex; align-items: center; gap: 8px;">
+        <span class="circle-icon">A</span>
+        <strong style="font-size: 16px; font-weight: bold;">Amala Project:</strong> {{ event.project?.name }}
+      </p>
+      <p style="display: flex; align-items: center; gap: 8px;">
+        <mat-icon>event</mat-icon>
+        <strong>Event Type:</strong> {{ event.event_type?.name }}
+      </p>
+      <p style="display: flex; align-items: center; gap: 8px;">
+        <mat-icon>email</mat-icon>
+        <strong>Contact Email:</strong> {{ event.contact_email }}
+      </p>
+      <p style="display: flex; align-items: center; gap: 8px;">
+        <mat-icon>phone</mat-icon>
+        <strong>Contact Number:</strong> {{ event.contact_no }}
+      </p>
+      <p style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <mat-icon>place</mat-icon>
+        <strong>Event Venue:</strong> {{ event.event_venue?.name || 'N/A' }}
+        <!-- (Capacity: {{ event.event_venue?.capacity || 'N/A' }}, Building: {{ event.event_venue?.building_name || 'N/A' }}) -->
+      </p>
+     
+
+      <p>
+        <strong><mat-icon>schedule</mat-icon> Time:</strong> 
+        {{ event.datetime_from | date: 'dd-MM-yy(h:mm a)' }} - {{ event.datetime_to | date: 'dd-MM-yy(h:mm a)' }}
+
+      </p>
+      <p>
+        <strong><mat-icon>account_circle</mat-icon> Department:</strong> 
+        {{ event.department.departmentName }}</p>
+
+      <p *ngIf="event.rejectionDetails" style="display: flex; align-items: flex-start; gap: 8px;">
+        <mat-icon>block</mat-icon>
+        <span>
+          <strong>Rejected By:</strong> {{event.rejectionDetails.user?.name }}<br>
+          <strong>Reason:</strong> {{ event.rejectionDetails?.reason_for_rejection || 'No reason provided' }}
+        </span>
+      </p>
+      
+      <p *ngIf="event.event_report" style="display: flex; align-items: center; gap: 8px;">
+        <mat-icon>description</mat-icon>
+        <strong>Event Report:</strong> {{ event.event_report }}
+      </p>
+      <p style="display: flex; align-items: center; gap: 8px;">
+        <mat-icon>info</mat-icon>
+        <strong>Status:</strong> 
+        {{ event.status?.status || 'N/A' }}
+      </p>
+      
+  
+      <p *ngIf="event.status?.status === 'Cancelled'"  style="display: flex; align-items: center; gap: 8px;">
+        <strong>Reason:</strong> {{ event.cancel_reason || 'No reason provided' }}
+    </p>
+      
+    </mat-card-content><br>
+    
+  
+      <h2>Uploads</h2>
+      <mat-accordion>
+      <!-- Loop through each event -->
+      <mat-expansion-panel *ngFor="let event of events">
+       <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ event.name }}
+      </mat-panel-title>
+      <mat-panel-description>
+        {{ event.softcopyDetails?.length || 0 }} files
+      </mat-panel-description>
+      </mat-expansion-panel-header>
+
+    <!-- Softcopy Details Container -->
+    <div *ngIf="event.softcopyDetails && event.softcopyDetails.length > 0" class="scrollable-container">
+      <div class="softcopy-details" fxLayout="row nowrap" fxLayoutGap="10px">
+        
+        <!-- Display softcopies in a scrollable row, limiting the number shown -->
+        <div *ngFor="let softcopy of event.softcopyDetails; let i = index" 
+             class="softcopy-box" 
+             fxFlex="none" 
+             fxLayout="column" 
+             fxLayoutAlign="start center">
+          
+          <!-- Image Preview or PDF Icon -->
+          <ng-container *ngIf="isImage(softcopy.original_filename); else pdfTemplate">
+            <img [src]="getFileUrl(softcopy)" alt="Softcopy Image" class="thumbnail" />
+          </ng-container>
+          
+          <!-- PDF Template -->
+          <ng-template #pdfTemplate>
+            <mat-icon>picture_as_pdf</mat-icon>
+          </ng-template>
+          
+          <!-- Filename and Delete Button -->
+          <a [href]="getFileUrl(softcopy)" target="_blank" class="file-name">{{ softcopy.original_filename }}</a>
+          <button mat-icon-button color="warn" 
+                  (click)="deleteSoftcopy(event, softcopy)" 
+                  matTooltip="Delete File">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </mat-expansion-panel>
+     </mat-accordion><br>
+
+   
+    
+    <div *ngIf="showUploadMap[event.id]">
+      <app-uploads [eventId]="event.id" [softcopy_type]="2"></app-uploads>
+    </div>
+
+    <div *ngIf="showEditorMap[event.id]">
+      <ckeditor [editor]="Editor" [config]="editorConfig" [(ngModel)]="editorContent"></ckeditor>
+      <br>
+      <button mat-raised-button color="accent" (click)="saveContent(event.id)">Save</button>
+    </div>
+
+  </mat-card><br>
+</div>
+
+
+<div *ngFor="let event of events">
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <div class="button-container">
+      
+      <button mat-icon-button color="primary" (click)="VenueEdit(event.id)" class="button-label">
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+      </button>
+      
+
+      <!-- Toggle button for sub-events -->
+      <button *ngIf="event.children?.length > 0" mat-icon-button color="primary" (click)="showsub(event.id)" class="button-label">
+        <mat-icon>splitscreen_vertical_add</mat-icon>
+        Sub
+      </button>
+      
+      
+      <!-- Budget details button -->
+      <button  *ngIf="event.budgetDetails?.length > 0" mat-icon-button color="primary" (click)="showbudget(event.id)" class="button-label">
+        <mat-icon>account_balance</mat-icon>
+        Budget
+      </button>
+      
+      <!-- Product details button -->
+      <button  *ngIf="event.productDetails?.length > 0" mat-icon-button color="primary" (click)="showservice(event.id)" class="button-label">
+        <mat-icon>edit_calendar</mat-icon>
+        Service
+      </button>
+
+      <button mat-icon-button color="primary" (click)="toggleUpload(event.id)" class="button-label">
+        <mat-icon>upload</mat-icon>
+        upload
+      </button>
+
+      <button mat-icon-button color="primary" (click)="toggleEditor(event.id)" class="button-label">
+        <mat-icon>description</mat-icon>
+        Report
+      </button>
+
+      <button mat-icon-button color="primary" (click)="contactview(event.id)" class="button-label">
+        <mat-icon>person</mat-icon>
+        Contact
+      </button>
+      
+    </div>
+  </div>
+</div>

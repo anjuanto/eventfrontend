@@ -1,0 +1,53 @@
+/* Styling for the mat-card */
+mat-card {
+    margin-bottom: 20px;
+    border: 1px solid #aabfe6; /* Light gray border around the card */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 128, 0, 0.5); /* Soft shadow */
+    padding: 16px; /* Padding inside the card */
+  }
+  
+
+  mat-card-title {
+    font-size: 1.5rem; /* Larger title font */
+    font-weight: bold;
+    color: #1976d2 !important; ;
+  }
+  
+  mat-card-subtitle {
+    font-size: 1rem;
+    color: green;
+  }
+
+
+ 
+  @media (max-width: 600px) {
+    /* Responsive styling for small screens */
+    mat-card {
+      margin-bottom: 10px;
+      padding: 12px;
+    }
+  
+    mat-card-title {
+      font-size: 1.2rem;
+     
+    }
+  
+    mat-card-subtitle {
+      font-size: 0.9rem;
+    }
+  
+    mat-card-content p {
+      margin-bottom: 6px;
+    }
+  }
+  .button-label {
+    align-items: center; 
+    justify-content: center; 
+    font-size: 12px;
+  }
+  
+  .button-label mat-icon {
+    margin-left: 10px; 
+  }
+  

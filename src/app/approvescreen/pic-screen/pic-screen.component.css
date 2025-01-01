@@ -1,0 +1,140 @@
+
+::ng-deep .custom-badge .mat-badge-content {
+  border-radius: 10px !important;
+  height: 22px !important;
+  min-width: 35px !important;
+  font-size: 12px !important;
+  line-height: 22px !important;
+  background-color: #ff4081 !important;
+  color: white !important;
+  display: inline-block !important;
+  text-align: center !important;
+  margin-bottom: 8px !important; /* Adjust margin */
+  right: 20 !important; /* Ensure it's correctly placed */
+}
+
+.event-card-container .mat-card {
+  border: 1px solid #0f0a0a !important;
+  border-radius: 4px; 
+  margin-bottom: 10px; 
+}
+
+
+.event-card {
+  border: 1px solid #bbbbcf; /* Light gray border */
+  border-radius: 8px; /* Optional: Adds rounded corners */
+  padding: 16px; /* Optional: Adds padding inside the card */
+  margin-bottom: 16px; /* Optional: Adds space between cards */
+  box-shadow: 0 2px 5px #1976d2 ;
+}
+
+
+.search {
+  width: 80%;
+  transition: box-shadow 0.3s ease; /* Smooth transition */
+}
+
+
+.title{
+  font-size: 16px; 
+          white-space: nowrap; 
+          overflow: hidden; 
+          text-overflow: ellipsis; 
+          display: inline-block; 
+          max-width: 150px;
+}
+.event-icon-circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e0e0e0; /* Light gray background for the circle */
+  color: #415dd8; /* Text color */
+  font-size: 14px; /* Adjust font size */
+  font-weight: bold;
+  margin-right: 10px; /* Space between icon and title */
+  text-transform: uppercase; /* Capitalize the letters */
+  box-shadow: 0 2px 5px #1976d2 ;
+}
+
+  
+  
+.example-header-image {
+
+  background-size: cover;
+  background-position: center;
+}
+.avatar {
+  width: 40px; /* Adjust size as needed */
+  height: 40px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+
+mat-card {
+  margin-bottom: 20px;
+  box-shadow: 0px 6px 12px rgba(0.3, 0.3, 0.3, 0.3); 
+  /* background-image: linear-gradient(to bottom, #e6ecff, #b3c6ff);  */
+  padding: 16px; 
+}
+.approve{
+  background-color:#4caf50 !important; /* Custom green */
+  color: white !important;
+  align-items: center;
+  border-radius: 20px; 
+  padding: 8px 16px;
+  font-weight: bold;
+}
+.rejected {
+  background-color: #f44336 !important; /* Custom red */
+  color: white !important;
+  align-items: center;
+  border-radius: 20px; 
+  padding: 8px 16px;
+  font-weight: bold;
+}
+.datebutton{
+  border-radius: 20px; 
+}
+.date-container{
+  padding:15px; 
+}
+
+.event-date-time {
+  text-align: left;
+  margin-top: 8px;
+}
+
+.event-month {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #3f51b5; 
+}
+
+.event-date {
+  font-size: 2rem;
+  font-weight: normal;
+  color: #757575; 
+}
+
+.event-time {
+  font-size: 1rem;
+  font-weight: lighter;
+  color: #9e9e9e; 
+}
+
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color:#3f51b5;
+  color: white;
+  border-radius: 50%;
+  padding: 3px 5px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+}
